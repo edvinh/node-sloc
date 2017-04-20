@@ -1,14 +1,13 @@
 {
   "name": "node-sloc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A small tool for counting SLOC.",
   "main": "index.js",
-  "preferGlobal": "true",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
   },
   "bin": {
-    "node-sloc": "./index.js"
+    "node-sloc": "bin/node-sloc.js"
   },
   "author": "Edvin Havic <edvinhavic@gmail.com>",
   "license": "MIT",

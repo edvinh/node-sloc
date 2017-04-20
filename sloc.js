@@ -1,34 +1,38 @@
 const fs = require('graceful-fs')
 const utils = require('./utils')
-const allowedExtensions = require('./file-extensions')
 
 /**
- * Async walks and counts SLOC in files in the given directory.
- * @param  {string} filepath           The directory to walk.
- * @param  {Array} extraExtensions     Additional extensions.
- * @param  {Array} ignoredExtensions   Ignored extensions.
- * @return {Promise}                   Resolves to an array of filepaths.
+ * @typedef {Object}  Options
+ * @property {string} path             The path to walk.
+ * @property {Array}  extensions       File extensions to look for.
+ * @property {Array}  [ignorePaths]    A list of directories to ignore.
+ * @param  {function} [logger]         Outputs extra information to this function if specified.
  */
-const walkAndCount = (filepath, extraExtensions, ignoredExtensions) => {
-  const extensions = [...allowedExtensions, ...extraExtensions].filter(e => !ignoredExtensions.includes(e))
+
+/**
+ * Async walks and counts SLOC in files in the given path.
+ * @param  {Options} options           Options passed to the function.
+ * @return {Promise}                   Resolves to an object containing SLOC and filepaths
+ */
+const walkAndCount = (options) => {
   return new Promise((resolve, reject) => {
-    if (!fs.existsSync(filepath)) {
-      reject('No such file or directory. Exiting.')
+    if (!fs.existsSync(options.path)) {
+      reject('No such file or path. Exiting.')
     }
 
-    if (fs.statSync(filepath).isFile()) {
+    if (fs.statSync(options.path).isFile()) {
       // If the file extension should be ignored, resolve with sloc: 0 and ignore the path
-      if (!utils.fileAllowed(filepath, extensions)) {
-        resolve({paths: [], sloc: 0})
+      if (!utils.fileAllowed(options.path, options.extensions)) {
+        resolve({ paths: [], sloc: 0 })
       }
-      utils.countSloc(filepath).then((res) => {
+      utils.countSloc(options.path).then((res) => {
         // If the path argument is a file, count it
-        resolve({paths: [filepath], sloc: res})
+        resolve({ paths: [options.path], sloc: res })
       })
-    } else if (fs.statSync(filepath).isDirectory()) {
-      utils.walk(filepath).then(res => {
+    } else if (fs.statSync(options.path).isDirectory()) {
+      utils.walk(options).then(res => {
         let promises = []
-        let filteredPaths = utils.filterFiles(res, extensions)
+        let filteredPaths = utils.filterFiles(res, options.extensions)
 
         filteredPaths.forEach(fpath => {
           promises.push(utils.countSloc(fpath))
@@ -37,7 +41,7 @@ const walkAndCount = (filepath, extraExtensions, ignoredExtensions) => {
         Promise.all(promises).then(values => {
           let totSloc = 0
           values.forEach((value) => totSloc += value)
-          resolve({paths: res, sloc: totSloc})
+          resolve({ paths: filteredPaths, sloc: totSloc })
         }).catch(err => reject(`Error when walkning directory: ${err}`))
       }).catch(err => reject(`Error when walkning directory: ${err}`))
     }
