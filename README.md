@@ -24,6 +24,7 @@ A small tool written in node for counting source lines of code. Currently only a
 ```
 ## Examples
 ```
+node-sloc --list-extensions
 node-sloc "../app"
 node-sloc "../app" --extra-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
 node-sloc file.js
