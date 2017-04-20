@@ -1,0 +1,24 @@
+{
+  "name": "node-sloc",
+  "version": "0.0.1",
+  "description": "A small tool for counting SLOC.",
+  "main": "index.js",
+  "preferGlobal": "true",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "bin": {
+    "node-sloc": "./index.js"
+  },
+  "author": "Edvin Havic <edvinhavic@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "graceful-fs": "^4.1.11",
+    "minimist": "^1.2.0",
+    "promisify-node": "^0.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0"
+  }
+}
