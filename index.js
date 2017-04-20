@@ -1,92 +1,47 @@
-#! /usr/bin/env node
-
-const chalk = require('chalk')
-const args = require('minimist')(process.argv.slice(2))
 const sloc = require('./sloc')
-const utils = require('./utils')
 const allowedExtensions = require('./file-extensions')
 
-const info = chalk.bold.blue
-const output = chalk.bold.gray
-const error = chalk.bold.red
-const result = chalk.bold.green
+/**
+ * @typedef  {Object}      Options
+ * @property {string}      path               The path to walk or file to read.
+ * @property {Array}       [extensions]       Additional file extensions to look for.
+ * @property {Array}       [ignorePaths]      A list of directories to ignore.
+ * @property {boolean}     [ignoreDefault]    Ignores the default file extensions.
+ * @property {function}    [logger]           Outputs extra information to this function if specified.
+ */
 
-const helpText = `
-  usage:
-             node-sloc [path] [options]
-  options:
-             -h, --help                   Prints usage information (the one you're reading right now)
+/**
+ * Reads a specified file/directory and counts the SLOC.
+ * If a directory is supplied the function will walk the directory recursively and count the SLOC.
+ * @param  {Options} options   The options. See object options.
+ * @return {Promise}           Returns a promise which will resolve to an object with properties `sloc` and `paths`.
+ */
+module.exports = (options) => {
 
-             -l, --list-extensions        Lists all default file extensions
-
-             -e, --extra-extensions       Include non-default file extensions,
-                                          specified by a comma separated string of extensions
-
-             -i, --ignore-extensions      Include list of file extensions to ignore,
-                                          specified by a comma separated string of extensions
-
-              -v, --verbose               Output extra information during execution
-
-  examples:
-             node-sloc "../app"
-             node-sloc "../app" --extra-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
-             node-sloc file.js
-   `
-
-let extraExtensions = []
-let ignoredExtensions = []
-
-const handleExtensionString = (param, shorthand) => {
-  let arg = args[param] || args[shorthand]
-  if (!arg) {
-    console.log(error(`Missing argument for --${param}`))
-    process.exit(0)
+  // Check if options object is valid
+  if (typeof options !== 'object' || !options) {
+    return Promise.reject(new Error('Parameter `options` must be an object.'))
   }
-  return arg.replace(/ |\./g, '').split(',')
-}
 
-// Help argument
-if (args.help || args.h) {
-  console.log(helpText)
-  process.exit(0)
-}
-
-// List extensions argument
-if (args['list-extensions'] || args.l) {
-  console.log('Supported file extensions:\n', `.${allowedExtensions.join('\n .')}`)
-  process.exit(0)
-}
-
-// Path argument
-if (args._.length === 0) {
-  console.log(error('No file or directory specified. Exiting.\n'), helpText)
-  process.exit(0)
-}
-
-// Extra extensions argument
-if (args['extra-extensions'] || args.e) {
-  extraExtensions = handleExtensionString('extra-extensions', 'e')
-}
-
-// Extra extensions argument
-if (args['ignore-extensions'] || args.i) {
-  ignoredExtensions = handleExtensionString('ignore-extensions', 'i')
-}
-
-const filepath = args._[0]
-
-console.log(info('Reading file(s)...'))
-
-sloc.walkAndCount(filepath, extraExtensions, ignoredExtensions).then((res) => {
-  // This needs some refactoring...
-  const filteredExtensions = [...allowedExtensions, ...extraExtensions].filter(e => !ignoredExtensions.includes(e))
-  const paths = utils.filterFiles(res.paths, filteredExtensions)
-  if (args.verbose || args.v) {
-    console.log(info('Counted the following files: '))
-    console.log(output(paths.join('\n')))
+  if (typeof options.path !== 'string') {
+    return Promise.reject(new Error('`options.path` must be a string.'))
   }
-  console.log(result('SLOC: ', res.sloc))
-}).catch(err => {
-  console.log(error(err))
-  process.exit(0)
-})
+
+  // if ignoreDefault is true, extensions must be supplied as well
+  if (options.ignoreDefault && !options.extensions) {
+    return Promise.reject(new Error('`options.extensions` must be supplied when ignoreDefault is set to true'))
+  }
+
+  let extensions = allowedExtensions
+  let ignorePaths = options.ignorePaths || []
+  if (options.extensions) {
+    extensions = [...allowedExtensions, ...options.extensions]
+  }
+
+  return sloc.walkAndCount({
+    path: options.path,
+    logger: options.logger,
+    extensions,
+    ignorePaths,
+  })
+}
