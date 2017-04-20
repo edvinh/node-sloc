@@ -19,13 +19,11 @@ A small tool written in node for counting source lines of code. Currently only a
                              specified by a comma separated string of extensions
 
 -v, --verbose                Output extra information during execution
-
-
 ```
 ## Examples
 ```
-node-sloc --list-extensions
-node-sloc "../app"
-node-sloc "../app" --extra-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
 node-sloc file.js
+node-sloc "../app"
+node-sloc --list-extensions
+node-sloc "../app" --extra-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
 ```
