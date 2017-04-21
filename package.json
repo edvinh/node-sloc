@@ -9,6 +9,10 @@
   "bin": {
     "node-sloc": "bin/node-sloc.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/edvinh/node-sloc.git"
+  },
   "author": "Edvin Havic <edvinhavic@gmail.com>",
   "license": "MIT",
   "dependencies": {
