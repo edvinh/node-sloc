@@ -64,16 +64,51 @@ const walk = (options) => {
  */
 const countSloc = (file) => {
   return new Promise((resolve, reject) => {
+    const extension = file.split('.').pop().toLowerCase() // get the file extension
+    const comments = getCommentChars(extension) // eslint-disable-line
     let sloc = 0
+    let inMultiline = false
     const rl = readline.createInterface({
       input: fs.createReadStream(file),
     })
 
-    rl.on('line', (line) => {
+    rl.on('line', (l) => {
+      const line = l.trim() // Trim the line to remove white space
       // Exclude empty lines
-      if (line.length > 0) {
-        sloc++
+      if (line.length === 0) {
+        return
       }
+
+      // Check if a multi-line comment (comment block) starts
+      if (comments.multi && line.indexOf(comments.multi.start) === 0) {
+        const commentEnd = line.indexOf(comments.multi.end)
+
+        // Check if the mult-line comment ends at the same line
+        if (commentEnd !== -1 && commentEnd !== 0) {
+          return
+        }
+
+        inMultiline = !inMultiline
+        return
+      }
+
+      // Check if we're in a multi-line comment and if the comment ends on this line
+      if (inMultiline && line.indexOf(comments.multi.end) !== -1) {
+        inMultiline = false
+        return
+      }
+
+      if (inMultiline) {
+        return
+      }
+
+      // Check if the line starts with a comment, exclude if true
+      if (comments.line && line.indexOf(comments.line) === 0) {
+        return
+      }
+
+      // No comments, increase the count
+      sloc++
     })
 
     rl.on('error', (err) => reject(err))
@@ -92,6 +127,63 @@ const filterFiles = (files, extensions) => {
   return files.filter((file) => {
     return fileAllowed(file, extensions)
   })
+}
+
+/* Returns the comment syntax for specific languages */
+function getCommentChars (extension) {
+  // Maybe I should try to make this prettier...
+  switch (extension) {
+    case 'c':
+    case 'cc':
+    case 'cpp':
+    case 'cxx':
+    case 'cs':
+    case 'java':
+    case 'js':
+    case 'go':
+    case 'h':
+    case 'hx':
+    case 'hxx':
+    case 'hpp':
+    case 'jsx':
+    case 'php':
+    case 'php5':
+    case 'scss':
+    case 'sass':
+    case 'scala':
+    case 'swift':
+    case 'ts':
+    case 'tsx':
+    case 'groovy':
+    case 'm':
+    case 'mm':
+      return { line: '//', multi: { start: '/*', end: '*/' } }
+    case 'htm':
+    case 'html':
+    case 'xml':
+      return { line: null, multi: { start: '<!--', end: '-->' } }
+    case 'ex':
+    case 'eex':
+    case 'sh':
+    case 'yaml':
+      return { line: '#', multi: null }
+    case 'py':
+      return { line: '#', multi: { start: '"""', end: '"""' } }
+    case 'css':
+      return { line: null, multi: { start: '/*', end: '*/' } }
+    case 'rs':
+      return { line: '//', multi: null }
+    case 'vb':
+      return { line: '\'', multi: null }
+    case 'lua':
+      return { line: '--', multi: { start: '--[[', end: ']]' } }
+    case 'nut':
+      return { line: '#', multi: { start: '/*', end: '*/' } }
+    case 'coffee':
+      return { line: '#', multi: { start: '###', end: '###' } }
+    default:
+      return { line: null, multi: null }
+  }
 }
 
 module.exports = {
