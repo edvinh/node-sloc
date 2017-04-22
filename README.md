@@ -3,9 +3,9 @@ A small tool written in node for counting source lines of code.
 
 ## Installation
 ### As a command line application
-```npm install -g edvinh/node-sloc```
+```npm install -g node-sloc```
 ### As a node module
-```npm install --save edvinh/node-sloc```
+```npm install --save node-sloc```
 # Usage
 ## Command Line
 ``` node-sloc [path] [options] ```
