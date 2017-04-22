@@ -1,6 +1,6 @@
 {
   "name": "node-sloc",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A small tool for counting SLOC.",
   "author": "Edvin Havic <edvinhavic@gmail.com>",
   "main": "index.js",
@@ -14,7 +14,9 @@
     "type": "git",
     "url": "git://github.com/edvinh/node-sloc.git"
   },
-  "keywords": ["sloc"],
+  "keywords": [
+    "sloc"
+  ],
   "license": "MIT",
   "dependencies": {
     "chalk": "^1.1.3",
