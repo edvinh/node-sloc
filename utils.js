@@ -67,6 +67,8 @@ const countSloc = (file) => {
     const extension = file.split('.').pop().toLowerCase() // get the file extension
     const comments = getCommentChars(extension) // eslint-disable-line
     let sloc = 0
+    let numComments = 0
+    let blankLines = 0
     let inMultiline = false
     const rl = readline.createInterface({
       input: fs.createReadStream(file),
@@ -76,12 +78,14 @@ const countSloc = (file) => {
       const line = l.trim() // Trim the line to remove white space
       // Exclude empty lines
       if (line.length === 0) {
+        blankLines++
         return
       }
 
       // Check if a multi-line comment (comment block) starts
       if (comments.multi && line.indexOf(comments.multi.start) === 0) {
         const commentEnd = line.indexOf(comments.multi.end)
+        numComments++
 
         // Check if the mult-line comment ends at the same line
         if (commentEnd !== -1 && commentEnd !== 0) {
@@ -94,16 +98,19 @@ const countSloc = (file) => {
 
       // Check if we're in a multi-line comment and if the comment ends on this line
       if (inMultiline && line.indexOf(comments.multi.end) !== -1) {
+        numComments++
         inMultiline = false
         return
       }
 
       if (inMultiline) {
+        numComments++
         return
       }
 
       // Check if the line starts with a comment, exclude if true
       if (comments.line && line.indexOf(comments.line) === 0) {
+        numComments++
         return
       }
 
@@ -112,7 +119,7 @@ const countSloc = (file) => {
     })
 
     rl.on('error', (err) => reject(err))
-    rl.on('close', () => resolve(sloc))
+    rl.on('close', () => resolve({ sloc: sloc, comments: numComments, blank: blankLines }))
   })
 }
 
@@ -127,6 +134,24 @@ const filterFiles = (files, extensions) => {
   return files.filter((file) => {
     return fileAllowed(file, extensions)
   })
+}
+
+const prettyPrint = (obj) => {
+  const str =
+  `
+    /---------------------------------------------------\\
+    | SLOC                          | ${obj.sloc.sloc} \t\t|
+    |-------------------------------|--------------------
+    | Lines of comments             | ${obj.sloc.comments} \t\t|
+    |-------------------------------|--------------------
+    | Blank lines                   | ${obj.sloc.blank} \t\t|
+    |-------------------------------|--------------------
+    | Files counted                 | ${obj.sloc.files} \t\t|
+    |-------------------------------|--------------------
+    | Total LOC                     | ${obj.sloc.loc} \t\t|
+    \\---------------------------------------------------/
+  `
+  return str
 }
 
 /* Returns the comment syntax for specific languages */
@@ -181,6 +206,8 @@ function getCommentChars (extension) {
       return { line: '#', multi: { start: '/*', end: '*/' } }
     case 'coffee':
       return { line: '#', multi: { start: '###', end: '###' } }
+    case 'rb':
+      return { line: '#', multi: { start: '=begin', end: '=end' } }
     default:
       return { line: null, multi: null }
   }
@@ -191,4 +218,5 @@ module.exports = {
   countSloc,
   filterFiles,
   fileAllowed,
+  prettyPrint,
 }

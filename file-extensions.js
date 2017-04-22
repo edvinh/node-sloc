@@ -36,6 +36,7 @@ module.exports = [
   'php',
   'php5',
   'py',
+  'rb',
   'rs',
   'sass',
   'scala',

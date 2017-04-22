@@ -23,11 +23,11 @@ const walkAndCount = (options) => {
     if (fs.statSync(options.path).isFile()) {
       // If the file extension should be ignored, resolve with sloc: 0 and ignore the path
       if (!utils.fileAllowed(options.path, options.extensions)) {
-        resolve({ paths: [], sloc: 0 })
+        resolve({ paths: [], sloc: {} })
       }
       utils.countSloc(options.path).then((res) => {
         // If the path argument is a file, count it
-        resolve({ paths: [options.path], sloc: res })
+        resolve({ paths: [options.path], sloc: Object.assign({}, res, { files: 1, loc: res.sloc + res.comments }) })
       })
     } else if (fs.statSync(options.path).isDirectory()) {
       utils.walk(options).then(res => {
@@ -40,8 +40,24 @@ const walkAndCount = (options) => {
 
         Promise.all(promises).then(values => {
           let totSloc = 0
-          values.forEach((value) => totSloc += value)
-          resolve({ paths: filteredPaths, sloc: totSloc })
+          let totBlank = 0
+          let totComments = 0
+          let totFiles = filteredPaths.length
+          values.forEach((value) => {
+            totSloc += value.sloc
+            totBlank += value.blank
+            totComments += value.comments
+          })
+          resolve({
+            paths: filteredPaths,
+            sloc: {
+              loc: totSloc + totComments,
+              sloc: totSloc,
+              blank: totBlank,
+              comments: totComments,
+              files: totFiles,
+            },
+          })
         }).catch(err => reject(`Error when walkning directory: ${err}`))
       }).catch(err => reject(`Error when walkning directory: ${err}`))
     }

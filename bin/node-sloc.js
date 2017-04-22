@@ -3,6 +3,7 @@
 const chalk = require('chalk')
 const args = require('minimist')(process.argv.slice(2))
 const sloc = require('../sloc')
+const utils = require('../utils')
 const allowedExtensions = require('../file-extensions')
 
 const info = chalk.bold.blue
@@ -106,7 +107,7 @@ const options = {
 }
 
 sloc.walkAndCount(options).then((res) => {
-  console.log(result('SLOC: ', res.sloc))
+  console.log(result(utils.prettyPrint(res)))
 }).catch(err => {
   console.log(error(err))
   process.exit(0)
