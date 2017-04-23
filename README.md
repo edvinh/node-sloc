@@ -62,6 +62,21 @@ extensions       Additional file extensions to look for. Required if ignoreDefau
 ignorePaths      Optional. A list of directories to ignore.
 logger           Optional. Outputs extra information to if specified.
 ```
+### Resolved object
+The object returned when executing the function has the following structure:
+```js
+{
+  paths,        // An array of all filepaths counted
+  sloc: {       // Object containing the data
+    loc,        // Lines of code (SLOC + comments)
+    sloc,       // Source lines of code
+    blank,      // Number of blank lines
+    comments,   // Lines of comments
+    files,      // Number of files counted
+  }
+}
+```
+
 ### Example
 ```js
 const sloc = require('node-sloc')
@@ -74,7 +89,7 @@ const options = {
 }
 
 sloc(options).then((res) => {
-  console.log(res.paths, res.sloc)
+  console.log(res.paths, res.sloc.sloc, res.sloc.comments)
 })
 
 ```
