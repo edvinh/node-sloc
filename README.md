@@ -60,6 +60,7 @@ The options object the function takes as a parameter has the following propertie
 path             Required. The path to walk or file to read.
 extensions       Additional file extensions to look for. Required if ignoreDefault is set to true.
 ignorePaths      Optional. A list of directories to ignore.
+ignoreDefault    Optional. Whether to ignore the default file extensions or not. Defaults to false.
 logger           Optional. Outputs extra information to if specified.
 ```
 ### Resolved object
@@ -85,6 +86,7 @@ const options = {
   path: '../app',                      // Required. The path to walk or file to read.
   extensions: ['aaa', 'bbb', 'ccc'],   // Additional file extensions to look for. Required if ignoreDefault is set to true.
   ignorePaths: ['node_modules'],       // A list of directories to ignore.
+  ignoreDefault: false,                // Whether to ignore the default file extensions or not
   logger: console.log,                 // Optional. Outputs extra information to if specified.
 }
 
