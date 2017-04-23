@@ -177,6 +177,7 @@ function getCommentChars (extension) {
     case 'sass':
     case 'scala':
     case 'swift':
+    case 'rs':
     case 'ts':
     case 'tsx':
     case 'groovy':
@@ -196,8 +197,6 @@ function getCommentChars (extension) {
       return { line: '#', multi: { start: '"""', end: '"""' } }
     case 'css':
       return { line: null, multi: { start: '/*', end: '*/' } }
-    case 'rs':
-      return { line: '//', multi: null }
     case 'vb':
       return { line: '\'', multi: null }
     case 'lua':
