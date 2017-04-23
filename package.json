@@ -1,6 +1,6 @@
 {
   "name": "node-sloc",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A small tool for counting SLOC.",
   "author": "Edvin Havic <edvinhavic@gmail.com>",
   "main": "index.js",

@@ -1,0 +1,7 @@
+*.log
+.gitignore
+.eslintrc
+npm-debug.log*
+node_modules/
+coverage/
+test/
