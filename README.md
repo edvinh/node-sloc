@@ -3,6 +3,7 @@ A small tool written in node for counting source lines of code.
 
 ## Installation
 Can be used as either a command line application or as a module.
+
 ### As a command line application
 ```
 npm install -g node-sloc
