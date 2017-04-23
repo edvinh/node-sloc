@@ -15,6 +15,7 @@ npm install --save node-sloc
 # Usage
 ## Command Line
 ``` node-sloc [path] [options] ```
+
 ### Options
 ```
 usage:
