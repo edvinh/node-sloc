@@ -2,10 +2,15 @@
 A small tool written in node for counting source lines of code.
 
 ## Installation
+Can be used as either a command line application or as a module.
 ### As a command line application
-```npm install -g node-sloc```
+```
+npm install -g node-sloc
+```
 ### As a node module
-```npm install --save node-sloc```
+```sh
+npm install --save node-sloc
+```
 # Usage
 ## Command Line
 ``` node-sloc [path] [options] ```
@@ -49,7 +54,7 @@ sloc(options).then((res) => {...})
 ```
 
 ### Options
-The options object the function takes as a parameter has the following properties: 
+The options object the function takes as a parameter has the following properties:
 ```
 path             Required. The path to walk or file to read.
 extensions       Additional file extensions to look for. Required if ignoreDefault is set to true.
@@ -57,7 +62,7 @@ ignorePaths      Optional. A list of directories to ignore.
 logger           Optional. Outputs extra information to if specified.
 ```
 ### Example
-```
+```js
 const sloc = require('node-sloc')
 
 const options = {

@@ -139,7 +139,7 @@ const filterFiles = (files, extensions) => {
 const prettyPrint = (obj) => {
   const str =
   `
-    /---------------------------------------------------\\
+    +---------------------------------------------------+
     | SLOC                          | ${obj.sloc.sloc} \t\t|
     |-------------------------------|--------------------
     | Lines of comments             | ${obj.sloc.comments} \t\t|
@@ -149,7 +149,7 @@ const prettyPrint = (obj) => {
     | Files counted                 | ${obj.sloc.files} \t\t|
     |-------------------------------|--------------------
     | Total LOC                     | ${obj.sloc.loc} \t\t|
-    \\---------------------------------------------------/
+    +---------------------------------------------------+
   `
   return str
 }
@@ -209,7 +209,7 @@ function getCommentChars (extension) {
     case 'rb':
       return { line: '#', multi: { start: '=begin', end: '=end' } }
     default:
-      return { line: null, multi: null }
+      return { line: '//', multi: { start: '/*', end: '*/' } }
   }
 }
 
