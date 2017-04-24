@@ -3,7 +3,7 @@ module.exports = [
   { lang: 'as',
     comments: { line: null, multi: { start: null, end: null } } },
   { lang: 'asm',
-    comments: { line: null, multi: { start: null, end: null} } },
+    comments: { line: null, multi: { start: null, end: null } } },
   { lang: 'c',
     comments: { line: '//', multi: { start: '/*', end: '*/' } } },
   { lang: 'cc',
@@ -99,5 +99,5 @@ module.exports = [
   { lang: 'yaml',
     comments: { line: '#', multi: { start: null, end: null } } },
   { lang: 'yml',
-    comments: { line: null, multi: { start: null, end: null } } }
+    comments: { line: null, multi: { start: null, end: null } } },
 ]

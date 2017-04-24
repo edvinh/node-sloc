@@ -156,7 +156,7 @@ const prettyPrint = (obj) => {
 }
 
 /* Returns the comment syntax for specific languages */
-function getCommentChars(extension) {
+function getCommentChars (extension) {
   let ext = allowedExtensions.find(x => x.lang === extension)
 
   if (ext) {
@@ -164,7 +164,7 @@ function getCommentChars(extension) {
   } else {
     return {
       line: '//',
-      multi: { start: '/*', end: '*/' }
+      multi: { start: '/*', end: '*/' },
     }
   }
 }
