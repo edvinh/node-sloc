@@ -5,7 +5,7 @@ const args = require('minimist')(process.argv.slice(2))
 const sloc = require('../sloc')
 const utils = require('../utils')
 const allowedExtensions =
-    require('../file-extensions').map(x => x.lang)
+  require('../file-extensions').map(x => x.lang)
 
 const info = chalk.bold.blue
 const output = chalk.bold.gray
