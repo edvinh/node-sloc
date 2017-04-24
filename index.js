@@ -1,5 +1,5 @@
 const sloc = require('./sloc')
-const allowedExtensions = require('./file-extensions')
+const allowedExtensions = require('./file-extensions').map(x => x.lang)
 
 /**
  * @typedef  {Object}      Options
