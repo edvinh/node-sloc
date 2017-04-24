@@ -1,6 +1,8 @@
 # node-sloc
 A small tool written in node for counting source lines of code.
 
+[![NPM](https://nodei.co/npm/node-sloc.png)](https://nodei.co/npm/node-sloc/)
+
 ## Installation
 Can be used as either a command line application or as a module.
 
