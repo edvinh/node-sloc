@@ -2,6 +2,7 @@ const promisify = require('promisify-node')
 const path = require('path')
 const readline = require('readline')
 const fs = promisify('graceful-fs')
+const allowedExtensions = require('./file-extensions.js')
 
 /**
  * Walks the directory dir async and returns a promise which
@@ -155,60 +156,16 @@ const prettyPrint = (obj) => {
 }
 
 /* Returns the comment syntax for specific languages */
-function getCommentChars (extension) {
-  // Maybe I should try to make this prettier...
-  switch (extension) {
-    case 'c':
-    case 'cc':
-    case 'cpp':
-    case 'cxx':
-    case 'cs':
-    case 'java':
-    case 'js':
-    case 'go':
-    case 'h':
-    case 'hx':
-    case 'hxx':
-    case 'hpp':
-    case 'jsx':
-    case 'php':
-    case 'php5':
-    case 'scss':
-    case 'sass':
-    case 'scala':
-    case 'swift':
-    case 'rs':
-    case 'ts':
-    case 'tsx':
-    case 'groovy':
-    case 'm':
-    case 'mm':
-      return { line: '//', multi: { start: '/*', end: '*/' } }
-    case 'htm':
-    case 'html':
-    case 'xml':
-      return { line: null, multi: { start: '<!--', end: '-->' } }
-    case 'ex':
-    case 'eex':
-    case 'sh':
-    case 'yaml':
-      return { line: '#', multi: null }
-    case 'py':
-      return { line: '#', multi: { start: '"""', end: '"""' } }
-    case 'css':
-      return { line: null, multi: { start: '/*', end: '*/' } }
-    case 'vb':
-      return { line: '\'', multi: null }
-    case 'lua':
-      return { line: '--', multi: { start: '--[[', end: ']]' } }
-    case 'nut':
-      return { line: '#', multi: { start: '/*', end: '*/' } }
-    case 'coffee':
-      return { line: '#', multi: { start: '###', end: '###' } }
-    case 'rb':
-      return { line: '#', multi: { start: '=begin', end: '=end' } }
-    default:
-      return { line: '//', multi: { start: '/*', end: '*/' } }
+function getCommentChars(extension) {
+  let ext = allowedExtensions.find(x => x.lang === extension)
+
+  if (ext) {
+    return ext.comments
+  } else {
+    return {
+      line: '//',
+      multi: { start: '/*', end: '*/' }
+    }
   }
 }
 
