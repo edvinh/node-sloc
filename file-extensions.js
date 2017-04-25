@@ -112,7 +112,7 @@ module.exports = [
     comments: { line: '#', multi: { start: null, end: null } },
   },
   { lang: 'styl',
-    comments: { line: null, multi: { start: null, end: null } },
+    comments: { line: '//', multi: { start: '/*', end: '*/' } },
   },
   { lang: 'swift',
     comments: { line: '//', multi: { start: '/*', end: '*/' } },
