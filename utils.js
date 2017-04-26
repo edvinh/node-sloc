@@ -17,7 +17,6 @@ const walk = (options) => {
     let results = []
     fs.readdir(options.path).then((files) => {
       let len = files.length
-
       if (!len) {
         resolve(results)
       }
@@ -37,8 +36,11 @@ const walk = (options) => {
             }
           } else if (stat.isDirectory()) {
             if (options.ignorePaths) {
-              if (options.ignorePaths.includes(file)) {
+              if (options.ignorePaths.includes(dirFile)) {
                 len--
+                if (!len) {
+                  resolve(results)
+                }
                 return
               }
             }

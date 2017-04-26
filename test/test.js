@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 const chai = require('chai')
+const path = require('path')
 const expect = chai.expect
 const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
@@ -69,6 +70,18 @@ describe('Count', () => {
     return expect(result).to.eventually.eql({
       paths: [],
       sloc: {},
+    })
+  })
+
+  it('should be able to exclude nested directories', () => {
+    const options = {
+      path: 'test/test_assets',
+      ignorePaths: [`test${path.sep}test_assets${path.sep}lang`],
+    }
+
+    const result = sloc(options)
+    return result.then((res) => {
+      return expect(res.sloc.files).to.eql(3)
     })
   })
 

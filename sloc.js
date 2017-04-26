@@ -33,7 +33,6 @@ const walkAndCount = (options) => {
       utils.walk(options).then(res => {
         let promises = []
         let filteredPaths = utils.filterFiles(res, options.extensions)
-
         filteredPaths.forEach(fpath => {
           promises.push(utils.countSloc(fpath))
         })

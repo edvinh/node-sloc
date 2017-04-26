@@ -55,6 +55,17 @@ const handleExtensionString = (param, shorthand) => {
   return arg.replace(/ |\.|\\|\//g, '').split(',')
 }
 
+const handlePathString = (param, shorthand) => {
+  let arg = args[param] || args[shorthand]
+  if (!arg) {
+    console.log(error(`Missing argument for --${param}`))
+    process.exit(0)
+  }
+
+  // Strip spaces and split on comma
+  return arg.replace(/ /g, '').split(',')
+}
+
 // Help
 if (args.help || args.h) {
   console.log(helpText)
@@ -84,7 +95,7 @@ if (args['ignore-extensions'] || args.i) {
 }
 
 if (args['ignore-paths'] || args.x) {
-  ignorePaths = handleExtensionString('ignore-paths', 'x')
+  ignorePaths = handlePathString('ignore-paths', 'x')
 }
 
 // Custom extensions
