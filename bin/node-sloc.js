@@ -78,7 +78,7 @@ if (args['include-extensions'] || args.e) {
   extraExtensions = handleExtensionString('include-extensions', 'e')
 }
 
-// Extra extensions
+// Ignore extensions
 if (args['ignore-extensions'] || args.i) {
   ignoreExtensions = handleExtensionString('ignore-extensions', 'i')
 }
@@ -87,7 +87,7 @@ if (args['ignore-paths'] || args.x) {
   ignorePaths = handleExtensionString('ignore-paths', 'x')
 }
 
-// Cusom extensions
+// Custom extensions
 if (args['ignore-default'] || args.d) {
   if (extraExtensions.length === 0) {
     console.log(error('Error: flag --ignore-default was set but no file extensions were specified.'))
@@ -108,6 +108,12 @@ const options = {
 }
 
 sloc.walkAndCount(options).then((res) => {
+
+  // All res.sloc properties are undefined if the file extension was unknown
+  if (res.sloc.sloc === undefined) {
+    console.log(error('Unknown file extension. Use flag --extra-extensions to include extensions.'))
+    process.exit(0)
+  }
   console.log(result(utils.prettyPrint(res)))
 }).catch(err => {
   console.log(error(err))

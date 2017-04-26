@@ -23,6 +23,13 @@ describe('Result Properties', () => {
     ])
   })
 
+  it('should reject promise when parameter isn\'t an object', () => {
+    const options = 'str'
+
+    const result = sloc(options)
+    return expect(result).to.be.rejected
+  })
+
   it('should reject promise when path is not supplied', () => {
     const options = {}
 
@@ -42,6 +49,29 @@ describe('Result Properties', () => {
 })
 
 describe('Count', () => {
+  it('should reject promise when path doesn\'t exist', () => {
+    const options = {
+      path: 'non/existant/path',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.be.rejected
+  })
+
+  it('should return object with empty `paths` and `sloc` properties when ignoring file type', () => {
+    const options = {
+      path: 'test/test_assets/file.c',
+      ignoreDefault: true,
+      extensions: ['other-file-extension'],
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: [],
+      sloc: {},
+    })
+  })
+
   it('should count SLOC, comments and blank lines correctly', () => {
     const options = {
       path: 'test/test_assets/file.c',
@@ -240,6 +270,24 @@ describe('Comment parsing', () => {
         blank: 2,
         files: 1,
         loc: 17,
+      },
+    })
+  })
+
+  it('should be able to parse haskell comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.hs',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.hs'],
+      sloc: {
+        sloc: 8,
+        comments: 2,
+        blank: 0,
+        files: 1,
+        loc: 10,
       },
     })
   })

@@ -157,7 +157,7 @@ const prettyPrint = (obj) => {
 
 /* Returns the comment syntax for specific languages */
 function getCommentChars (extension) {
-  let ext = allowedExtensions.find(x => x.lang === extension)
+  const ext = allowedExtensions.find(x => x.lang === extension)
 
   if (ext) {
     return ext.comments

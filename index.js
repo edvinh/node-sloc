@@ -35,7 +35,10 @@ module.exports = (options) => {
   let extensions = allowedExtensions
   let ignorePaths = options.ignorePaths || []
   if (options.extensions) {
-    extensions = [...allowedExtensions, ...options.extensions]
+    
+    // Don't use the default extensions if ignoreDefault is true
+    const ext = options.ignoreDefault ? [] : allowedExtensions
+    extensions = [...ext, ...options.extensions]
   }
 
   return sloc.walkAndCount({
