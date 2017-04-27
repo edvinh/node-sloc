@@ -110,8 +110,58 @@ const options = {
   logger: console.log,                 // Optional. Outputs extra information to if specified.
 }
 
+// Using promises
 sloc(options).then((res) => {
   console.log(res.paths, res.sloc.sloc, res.sloc.comments)
 })
 
+// Using node-style callbacks
+sloc(options, (err, res) => {
+  if (err) {
+    // do some error handling
+  }
+  console.log(res.paths, res.sloc.sloc, res.sloc.comments)
+})
 ```
+
+## Supported languages
+* ActionScript
+* Assembly
+* C#
+* C/C++
+* CoffeeScript
+* CSS
+* Elixir
+* Elm
+* Erlang
+* Go
+* Groovy
+* Handlebars
+* Haskell
+* HTML
+* Jade
+* Java
+* JavaScript
+* JSX
+* LESS
+* Lua
+* Mustache
+* Objective C/C++
+* Perl
+* PHP
+* Python
+* Ruby
+* Rust
+* Sass
+* Scala
+* Shell script
+* Squirrel
+* Stylus
+* Swift
+* TypeScript
+* Visual Basic
+* XML
+* YAML
+
+## License
+MIT
