@@ -47,7 +47,33 @@ describe('Result Properties', () => {
     const result = sloc(options)
     return expect(result).to.be.rejected
   })
+
+  it('should call callback when providing callback function', (done) => {
+    const options = {
+      path: 'test/test_assets/file.c',
+    }
+
+    const callback = (err) => {
+      if (err) {
+        done(err)
+      } else {
+        done()
+      }
+    }
+
+    sloc(options, callback)
+  })
+
+  it('should return error when callback isn\'t a function', () => {
+    const options = {
+      path: 'test/test_assets/file.c',      
+    }
+  
+    const err = sloc(options, 'callback')
+    return expect(err).to.be.instanceof(Error)
+  })
 })
+
 
 describe('Count', () => {
   it('should reject promise when path doesn\'t exist', () => {
@@ -157,6 +183,35 @@ describe('Count', () => {
         loc: 9,
       },
     })
+  })
+
+  it('should count correctly when using callback and nested paths', (done) => {
+    const options = {
+      path: 'test/test_assets',
+      ignorePaths: `test${path.sep}test_assets${path.sep}lang`,
+      extensions: ['qq'],
+    }
+
+    const callback = (err, res) => {
+      if (err) {
+        done(err)
+      } else {
+        try {
+          expect(res.sloc).to.be.eql({
+            sloc: 50,
+            comments: 88,
+            blank: 7,
+            files: 4,
+            loc: 138,
+          })
+          done()
+        } catch (e) {
+          done(e)
+        }
+      }
+    }
+
+    sloc(options, callback)
   })
 })
 
@@ -301,6 +356,96 @@ describe('Comment parsing', () => {
         blank: 0,
         files: 1,
         loc: 10,
+      },
+    })
+  })
+
+  it('should be able to parse mustache comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.mustache',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.mustache'],
+      sloc: {
+        sloc: 6,
+        comments: 5,
+        blank: 0,
+        files: 1,
+        loc: 11,
+      },
+    })
+  })
+
+  it('should be able to parse handlebars comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.hbs',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.hbs'],
+      sloc: {
+        sloc: 6,
+        comments: 5,
+        blank: 1,
+        files: 1,
+        loc: 11,
+      },
+    })
+  })
+
+  it('should be able to parse erlang comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.erl',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.erl'],
+      sloc: {
+        sloc: 2,
+        comments: 3,
+        blank: 0,
+        files: 1,
+        loc: 5,
+      },
+    })
+  })
+
+  it('should be able to parse perl comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.pl',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.pl'],
+      sloc: {
+        sloc: 3,
+        comments: 2,
+        blank: 0,
+        files: 1,
+        loc: 5,
+      },
+    })
+  })
+
+  it('should be able to parse elm comments', () => {
+    const options = {
+      path: 'test/test_assets/lang/file.elm',
+    }
+
+    const result = sloc(options)
+    return expect(result).to.eventually.eql({
+      paths: ['test/test_assets/lang/file.elm'],
+      sloc: {
+        sloc: 5,
+        comments: 6,
+        blank: 4,
+        files: 1,
+        loc: 11,
       },
     })
   })
