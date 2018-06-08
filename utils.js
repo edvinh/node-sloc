@@ -12,50 +12,54 @@ const allowedExtensions = require('./file-extensions.js')
  * @param  {function} [logger]   The function outputs extra information to this function if specified.
  * @return {Promise}             Resolves to an array of filepaths
  */
-const walk = (options) => {
+const walk = options => {
   return new Promise((resolve, reject) => {
     let results = []
-    fs.readdir(options.path).then((files) => {
-      let len = files.length
-      if (!len) {
-        resolve(results)
-      }
+    fs.readdir(options.path)
+      .then(files => {
+        let len = files.length
+        if (!len) {
+          resolve(results)
+        }
 
-      files.forEach(file => {
-        const dirFile = path.join(options.path, file)
+        files.forEach(file => {
+          const dirFile = path.join(options.path, file)
 
-        fs.stat(dirFile).then((stat) => {
-          if (stat.isFile()) {
-            len--
-            results.push(dirFile)
-            if (options.logger) {
-              options.logger(`Checking file: ${dirFile}`)
-            }
-            if (!len) {
-              resolve(results)
-            }
-          } else if (stat.isDirectory()) {
-            if (options.ignorePaths) {
-              if (options.ignorePaths.includes(dirFile)) {
+          fs.stat(dirFile)
+            .then(stat => {
+              if (stat.isFile()) {
                 len--
+                results.push(dirFile)
+                if (options.logger) {
+                  options.logger(`Checking file: ${dirFile}`)
+                }
                 if (!len) {
                   resolve(results)
                 }
-                return
-              }
-            }
-            walk(Object.assign({}, options, { path: dirFile })).then((res) => {
-              len--
-              results = results.concat(res)
+              } else if (stat.isDirectory()) {
+                if (options.ignorePaths) {
+                  if (options.ignorePaths.includes(dirFile)) {
+                    len--
+                    if (!len) {
+                      resolve(results)
+                    }
+                    return
+                  }
+                }
+                walk(Object.assign({}, options, { path: dirFile })).then(res => {
+                  len--
+                  results = results.concat(res)
 
-              if (!len) {
-                resolve(results)
+                  if (!len) {
+                    resolve(results)
+                  }
+                })
               }
             })
-          }
-        }).catch((err) => reject(err))
+            .catch(err => reject(err))
+        })
       })
-    }).catch((err) => reject(err))
+      .catch(err => reject(err))
   })
 }
 
@@ -65,9 +69,12 @@ const walk = (options) => {
  * @param  {string}  file  The filepath of the file to be read.
  * @return {Promise}       Resolves to an object containing the SLOC count.
  */
-const countSloc = (file) => {
+const countSloc = file => {
   return new Promise((resolve, reject) => {
-    const extension = file.split('.').pop().toLowerCase() // get the file extension
+    const extension = file
+      .split('.')
+      .pop()
+      .toLowerCase() // get the file extension
     const comments = getCommentChars(extension) // eslint-disable-line
     let sloc = 0
     let numComments = 0
@@ -77,7 +84,7 @@ const countSloc = (file) => {
       input: fs.createReadStream(file),
     })
 
-    rl.on('line', (l) => {
+    rl.on('line', l => {
       const line = l.trim() // Trim the line to remove white space
       // Exclude empty lines
       if (line.length === 0) {
@@ -121,27 +128,29 @@ const countSloc = (file) => {
       sloc++
     })
 
-    rl.on('error', (err) => reject(err))
+    rl.on('error', err => reject(err))
     rl.on('close', () => resolve({ sloc: sloc, comments: numComments, blank: blankLines }))
   })
 }
 
 /* Checks if a file extension is allowed. */
 const fileAllowed = (file, extensions) => {
-  const extension = file.split('.').pop().toLowerCase() // get the file extension
-  return extensions.includes(extension)                 // check if it exists in the given array
+  const extension = file
+    .split('.')
+    .pop()
+    .toLowerCase() // get the file extension
+  return extensions.includes(extension) // check if it exists in the given array
 }
 
 /* Filters an array of filenames and returns a list of allowed files. */
 const filterFiles = (files, extensions) => {
-  return files.filter((file) => {
+  return files.filter(file => {
     return fileAllowed(file, extensions)
   })
 }
 
-const prettyPrint = (obj) => {
-  const str =
-  `
+const prettyPrint = obj => {
+  const str = `
     +---------------------------------------------------+
     | SLOC                          | ${obj.sloc.sloc} \t\t|
     |-------------------------------|--------------------

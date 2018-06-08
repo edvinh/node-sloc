@@ -4,8 +4,7 @@ const chalk = require('chalk')
 const args = require('minimist')(process.argv.slice(2))
 const sloc = require('../sloc')
 const utils = require('../utils')
-const allowedExtensions =
-  require('../file-extensions').map(x => x.lang)
+const allowedExtensions = require('../file-extensions').map(x => x.lang)
 
 const info = chalk.bold.blue
 const output = chalk.bold.gray
@@ -101,7 +100,9 @@ if (args['ignore-paths'] || args.x) {
 // Custom extensions
 if (args['ignore-default'] || args.d) {
   if (extraExtensions.length === 0) {
-    console.log(error('Error: flag --ignore-default was set but no file extensions were specified.'))
+    console.log(
+      error('Error: flag --ignore-default was set but no file extensions were specified.')
+    )
     process.exit(0)
   }
   extensions = []
@@ -109,24 +110,30 @@ if (args['ignore-default'] || args.d) {
 
 const filepath = args._[0] // Directory or file path
 console.log(info('Reading file(s)...'))
-const filteredExtensions = [...extensions, ...extraExtensions].filter(e => !ignoreExtensions.includes(e))
+const filteredExtensions = [...extensions, ...extraExtensions].filter(
+  e => !ignoreExtensions.includes(e)
+)
 
 const options = {
   path: filepath,
   extensions: filteredExtensions,
-  logger: (args.verbose || args.v) ? (v) => console.log(output(v)) : null,
+  logger: args.verbose || args.v ? v => console.log(output(v)) : null,
   ignorePaths: ignorePaths,
 }
 
-sloc.walkAndCount(options).then((res) => {
-
-  // All res.sloc properties are undefined if the file extension was unknown
-  if (res.sloc.sloc === undefined) {
-    console.log(error('Unknown file extension. Use flag --extra-extensions to include extensions.'))
+sloc
+  .walkAndCount(options)
+  .then(res => {
+    // All res.sloc properties are undefined if the file extension was unknown
+    if (res.sloc.sloc === undefined) {
+      console.log(
+        error('Unknown file extension. Use flag --extra-extensions to include extensions.')
+      )
+      process.exit(0)
+    }
+    console.log(result(utils.prettyPrint(res)))
+  })
+  .catch(err => {
+    console.log(error(err))
     process.exit(0)
-  }
-  console.log(result(utils.prettyPrint(res)))
-}).catch(err => {
-  console.log(error(err))
-  process.exit(0)
-})
+  })

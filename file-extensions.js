@@ -5,160 +5,212 @@ const elixirStyleCommens = { line: '#', multi: { start: null, end: null } }
 const htmlStyleComments = { line: null, multi: { start: '<!--', end: '-->' } }
 
 module.exports = [
-  { lang: 'as',
+  {
+    lang: 'as',
     comments: cStyleComments,
   },
-  { lang: 'asm',
+  {
+    lang: 'asm',
     comments: { line: ';', multi: { start: null, end: null } },
   },
-  { lang: 'c',
+  {
+    lang: 'c',
     comments: cStyleComments,
   },
-  { lang: 'cc',
+  {
+    lang: 'cc',
     comments: cStyleComments,
   },
-  { lang: 'coffee',
+  {
+    lang: 'coffee',
     comments: { line: '#', multi: { start: '###', end: '###' } },
   },
-  { lang: 'cpp',
+  {
+    lang: 'cpp',
     comments: cStyleComments,
   },
-  { lang: 'cs',
+  {
+    lang: 'cs',
     comments: cStyleComments,
   },
-  { lang: 'css',
+  {
+    lang: 'css',
     comments: { line: null, multi: { start: '/*', end: '*/' } },
   },
-  { lang: 'cxx',
+  {
+    lang: 'cxx',
     comments: cStyleComments,
   },
-  { lang: 'elm',
+  {
+    lang: 'elm',
     comments: { line: '--', multi: { start: '{-', end: '-}' } },
   },
-  { lang: 'erl',
+  {
+    lang: 'erl',
     comments: { line: '%', multi: { start: null, end: null } },
   },
-  { lang: 'ex',
+  {
+    lang: 'ex',
     comments: elixirStyleCommens,
   },
-  { lang: 'eex',
+  {
+    lang: 'eex',
     comments: elixirStyleCommens,
   },
-  { lang: 'go',
+  {
+    lang: 'go',
     comments: cStyleComments,
   },
-  { lang: 'groovy',
+  {
+    lang: 'groovy',
     comments: cStyleComments,
   },
-  { lang: 'h',
+  {
+    lang: 'h',
     comments: cStyleComments,
   },
-  { lang: 'hbs',
+  {
+    lang: 'hbs',
     comments: { line: null, multi: { start: '{{!', end: '}}' } },
   },
-  { lang: 'handlebars',
+  {
+    lang: 'handlebars',
     comments: { line: null, multi: { start: '{{!', end: '}}' } },
   },
-  { lang: 'hpp',
+  {
+    lang: 'hpp',
     comments: cStyleComments,
   },
-  { lang: 'hs',
+  {
+    lang: 'hs',
     comments: { line: '--', multi: { start: null, end: null } },
   },
-  { lang: 'htm',
+  {
+    lang: 'htm',
     comments: htmlStyleComments,
   },
-  { lang: 'html',
+  {
+    lang: 'html',
     comments: htmlStyleComments,
   },
-  { lang: 'hx',
+  {
+    lang: 'hx',
     comments: cStyleComments,
   },
-  { lang: 'hxx',
+  {
+    lang: 'hxx',
     comments: cStyleComments,
   },
-  { lang: 'jade',
+  {
+    lang: 'jade',
     comments: { line: '//', multi: { start: null, end: null } },
   },
-  { lang: 'java',
+  {
+    lang: 'java',
     comments: cStyleComments,
   },
-  { lang: 'js',
+  {
+    lang: 'js',
     comments: cStyleComments,
   },
-  { lang: 'jsx',
+  {
+    lang: 'jsx',
     comments: cStyleComments,
   },
-  { lang: 'less',
+  {
+    lang: 'less',
     comments: cStyleComments,
   },
-  { lang: 'lua',
+  {
+    lang: 'lua',
     comments: { line: '--', multi: { start: '--[[', end: ']]' } },
   },
-  { lang: 'm',
+  {
+    lang: 'm',
     comments: cStyleComments,
   },
-  { lang: 'mm',
+  {
+    lang: 'mm',
     comments: cStyleComments,
   },
-  { lang: 'mustache',
+  {
+    lang: 'mustache',
     comments: { line: null, multi: { start: '{{!', end: '}}' } },
   },
-  { lang: 'nut',
+  {
+    lang: 'nut',
     comments: { line: '#', multi: { start: '/*', end: '*/' } },
   },
-  { lang: 'pl',
+  {
+    lang: 'pl',
     comments: elixirStyleCommens,
   },
-  { lang: 'php',
+  {
+    lang: 'php',
     comments: cStyleComments,
   },
-  { lang: 'php5',
+  {
+    lang: 'php5',
     comments: cStyleComments,
   },
-  { lang: 'py',
+  {
+    lang: 'py',
     comments: { line: '#', multi: { start: '"""', end: '"""' } },
   },
-  { lang: 'rb',
+  {
+    lang: 'rb',
     comments: { line: '#', multi: { start: '=begin', end: '=end' } },
   },
-  { lang: 'rs',
+  {
+    lang: 'rs',
     comments: cStyleComments,
   },
-  { lang: 'sass',
+  {
+    lang: 'sass',
     comments: cStyleComments,
   },
-  { lang: 'scala',
+  {
+    lang: 'scala',
     comments: cStyleComments,
   },
-  { lang: 'scss',
+  {
+    lang: 'scss',
     comments: cStyleComments,
   },
-  { lang: 'sh',
+  {
+    lang: 'sh',
     comments: elixirStyleCommens,
   },
-  { lang: 'styl',
+  {
+    lang: 'styl',
     comments: cStyleComments,
   },
-  { lang: 'swift',
+  {
+    lang: 'swift',
     comments: cStyleComments,
   },
-  { lang: 'ts',
+  {
+    lang: 'ts',
     comments: cStyleComments,
   },
-  { lang: 'tsx',
+  {
+    lang: 'tsx',
     comments: cStyleComments,
   },
-  { lang: 'vb',
-    comments: { line: '\'', multi: { start: null, end: null } },
+  {
+    lang: 'vb',
+    comments: { line: "'", multi: { start: null, end: null } },
   },
-  { lang: 'xml',
+  {
+    lang: 'xml',
     comments: htmlStyleComments,
   },
-  { lang: 'yaml',
+  {
+    lang: 'yaml',
     comments: elixirStyleCommens,
   },
-  { lang: 'yml',
+  {
+    lang: 'yml',
     comments: elixirStyleCommens,
   },
 ]
