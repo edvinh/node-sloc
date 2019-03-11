@@ -4,6 +4,7 @@ const chalk = require('chalk')
 const args = require('minimist')(process.argv.slice(2))
 const sloc = require('../sloc')
 const utils = require('../utils')
+const { version } = require('../package.json')
 const allowedExtensions = require('../file-extensions').map(x => x.lang)
 
 const info = chalk.bold.blue
@@ -12,6 +13,8 @@ const error = chalk.bold.red
 const result = chalk.bold.green
 
 const helpText = `
+  node-sloc v. ${version}
+
   usage:
              node-sloc [path] [options]
   options:
