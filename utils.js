@@ -97,7 +97,7 @@ const countSloc = file => {
         const commentEnd = line.indexOf(comments.multi.end)
         numComments++
 
-        // Check if the mult-line comment ends at the same line
+        // Check if the multi-line comment ends at the same line
         if (commentEnd !== -1 && commentEnd !== 0) {
           return
         }
