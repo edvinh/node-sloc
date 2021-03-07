@@ -1,5 +1,5 @@
 const sloc = require('./sloc')
-const allowedExtensions = require('./file-extensions').map(x => x.lang)
+const allowedExtensions = require('./file-extensions').map((x) => x.lang)
 
 /**
  * @typedef  {Object}      Options
@@ -64,8 +64,8 @@ module.exports = (options, callback) => {
       extensions,
       ignorePaths,
     })
-    .then(res => callback(null, res))
-    .catch(err => callback(err))
+    .then((res) => callback(null, res))
+    .catch((err) => callback(err))
 
   return null
 }

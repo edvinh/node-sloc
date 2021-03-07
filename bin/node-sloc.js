@@ -5,7 +5,7 @@ const args = require('minimist')(process.argv.slice(2))
 const sloc = require('../sloc')
 const utils = require('../utils')
 const { version } = require('../package.json')
-const allowedExtensions = require('../file-extensions').map(x => x.lang)
+const allowedExtensions = require('../file-extensions').map((x) => x.lang)
 
 const info = chalk.bold.blue
 const output = chalk.bold.gray
@@ -28,7 +28,7 @@ const helpText = `
              -i, --ignore-extensions <list>     Include list of file extensions to ignore,
                                                 specified by a comma separated string of extensions
 
-             -x, --ignore-paths <list>          Include a list of folders to exclude
+             -x, --ignore-paths <list>          Include a list of folders to exclude. Supports glob patterns
 
              -d, --ignore-default               Ignore the default file extensions
 
@@ -37,7 +37,7 @@ const helpText = `
   examples:
              node-sloc "../app"
              node-sloc "../app" --include-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
-             node-sloc "../app" --ignore-paths "node_modules"
+             node-sloc "../app" --ignore-paths "node_modules, **/*.test.js"
              node-sloc file.js
    `
 
@@ -114,19 +114,19 @@ if (args['ignore-default'] || args.d) {
 const filepath = args._[0] // Directory or file path
 console.log(info('Reading file(s)...'))
 const filteredExtensions = [...extensions, ...extraExtensions].filter(
-  e => !ignoreExtensions.includes(e)
+  (e) => !ignoreExtensions.includes(e)
 )
 
 const options = {
   path: filepath,
   extensions: filteredExtensions,
-  logger: args.verbose || args.v ? v => console.log(output(v)) : null,
+  logger: args.verbose || args.v ? (v) => console.log(output(v)) : null,
   ignorePaths: ignorePaths,
 }
 
 sloc
   .walkAndCount(options)
-  .then(res => {
+  .then((res) => {
     // All res.sloc properties are undefined if the file extension was unknown
     if (res.sloc.sloc === undefined) {
       console.log(
@@ -136,7 +136,7 @@ sloc
     }
     console.log(result(utils.prettyPrint(res)))
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(error(err))
     process.exit(0)
   })

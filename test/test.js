@@ -16,15 +16,15 @@ describe('Result Properties', () => {
     const result = sloc(options)
 
     return Promise.all([
-      expect(result.then(o => o)).to.eventually.have.property('paths'),
-      expect(result.then(o => o.sloc)).to.eventually.have.property('sloc'),
-      expect(result.then(o => o.sloc)).to.eventually.have.property('loc'),
-      expect(result.then(o => o.sloc)).to.eventually.have.property('blank'),
+      expect(result.then((o) => o)).to.eventually.have.property('paths'),
+      expect(result.then((o) => o.sloc)).to.eventually.have.property('sloc'),
+      expect(result.then((o) => o.sloc)).to.eventually.have.property('loc'),
+      expect(result.then((o) => o.sloc)).to.eventually.have.property('blank'),
       expect(result.then((o) => o.sloc)).to.eventually.have.property('comments'),
     ])
   })
 
-  it('should reject promise when parameter isn\'t an object', () => {
+  it("should reject promise when parameter isn't an object", () => {
     const options = 'str'
 
     const result = sloc(options)
@@ -64,19 +64,18 @@ describe('Result Properties', () => {
     sloc(options, callback)
   })
 
-  it('should return error when callback isn\'t a function', () => {
+  it("should return error when callback isn't a function", () => {
     const options = {
-      path: 'test/test_assets/file.c',      
+      path: 'test/test_assets/file.c',
     }
-  
+
     const err = sloc(options, 'callback')
     return expect(err).to.be.instanceof(Error)
   })
 })
 
-
 describe('Count', () => {
-  it('should reject promise when path doesn\'t exist', () => {
+  it("should reject promise when path doesn't exist", () => {
     const options = {
       path: 'non/existant/path',
     }
@@ -111,6 +110,20 @@ describe('Count', () => {
     })
   })
 
+  it('should be able to exclude paths specified with a glob pattern', () => {
+    const options = {
+      path: 'test/test_assets',
+      ignorePaths: [`**/file.*`],
+      extensions: ['qq'],
+    }
+
+    const result = sloc(options)
+    return result.then((res) => {
+      console.log(res)
+      return expect(res.sloc.files).to.eql(3)
+    })
+  })
+
   it('should count SLOC, comments and blank lines correctly', () => {
     const options = {
       path: 'test/test_assets/file.c',
@@ -118,7 +131,7 @@ describe('Count', () => {
 
     const result = sloc(options)
     return expect(result).to.eventually.eql({
-      paths: [ 'test/test_assets/file.c' ],
+      paths: ['test/test_assets/file.c'],
       sloc: {
         sloc: 47,
         comments: 16,

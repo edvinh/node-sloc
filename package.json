@@ -6,7 +6,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "nyc --reporter=lcov node_modules/mocha/bin/_mocha -- -R spec"
+    "test": "nyc --reporter=lcov node_modules/mocha/bin/_mocha -- -R spec",
+    "prettier:base": "prettier --ignore-path .gitignore",
+    "eslint:base": "eslint --ignore-path .gitignore",
+    "lint:eslint": "npm run eslint:base -- --max-warnings 0 **/*.js",
+    "lint": "npm run lint:eslint",
+    "format:prettier": "npm run prettier:base -- --write **/*.js",
+    "format:eslint": "npm run eslint:base -- --fix **/*.js",
+    "format": "npm run format:eslint && npm run format:prettier"
   },
   "bin": {
     "node-sloc": "bin/node-sloc.js"
@@ -20,16 +27,22 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.4.2",
-    "graceful-fs": "^4.1.15",
-    "minimist": "^1.2.0",
-    "promisify-node": "^0.5.0"
+    "chalk": "^4.1.0",
+    "graceful-fs": "^4.2.6",
+    "micromatch": "^4.0.2",
+    "minimist": "^1.2.5"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.3",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^5.15.1",
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0"
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "mocha": "^8.3.1",
+    "nyc": "^15.1.0",
+    "prettier": "^2.2.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   }
 }
