@@ -84,7 +84,7 @@ const walk = (options) => {
 const countSloc = (file) => {
   return new Promise((resolve, reject) => {
     const extension = file.split('.').pop().toLowerCase() // get the file extension
-    const comments = getCommentChars(extension) // eslint-disable-line
+    const comments = getCommentChars(extension)
     let sloc = 0
     let numComments = 0
     let blankLines = 0

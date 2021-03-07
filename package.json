@@ -3,7 +3,7 @@
   "version": "0.1.12",
   "description": "A small tool for counting SLOC.",
   "author": "Edvin Havic <edvinhavic@gmail.com>",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node index.js",
     "test": "nyc --reporter=lcov node_modules/mocha/bin/_mocha -- -R spec",

@@ -5,7 +5,7 @@ const expect = chai.expect
 const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 
-const sloc = require('../index')
+const sloc = require('../src/index')
 
 describe('Result Properties', () => {
   it('should have correct properties', () => {
@@ -106,21 +106,20 @@ describe('Count', () => {
 
     const result = sloc(options)
     return result.then((res) => {
-      return expect(res.sloc.files).to.eql(3)
+      return expect(res.sloc.files).to.eql(4)
     })
   })
 
   it('should be able to exclude paths specified with a glob pattern', () => {
     const options = {
       path: 'test/test_assets',
-      ignorePaths: [`**/file.*`],
+      ignorePaths: ['**/file.*', 'multipleblockstarts*'],
       extensions: ['qq'],
     }
 
     const result = sloc(options)
     return result.then((res) => {
-      console.log(res)
-      return expect(res.sloc.files).to.eql(3)
+      return expect(res.sloc.files).to.eql(4)
     })
   })
 
@@ -201,7 +200,7 @@ describe('Count', () => {
   it('should count correctly when using callback and nested paths', (done) => {
     const options = {
       path: 'test/test_assets',
-      ignorePaths: `test${path.sep}test_assets${path.sep}lang`,
+      ignorePaths: ['test/test_assets/lang', '**/multipleblockstarts*'],
       extensions: ['qq'],
     }
 
@@ -225,6 +224,16 @@ describe('Count', () => {
     }
 
     sloc(options, callback)
+  })
+
+  it('should be able to parse multiple block comment start token occurrences in same comment block', () => {
+    const options = {
+      path: 'test/test_assets/multipleblockstarts.c',
+    }
+
+    const result = sloc(options)
+    expect(result).to.eventually.have.nested.property('sloc.sloc', 3)
+    expect(result).to.eventually.have.nested.property('sloc.comments', 5)
   })
 })
 
