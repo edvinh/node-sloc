@@ -4,13 +4,19 @@
     "builtin": true,
     "es6": true
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
+    "ecmaVersion": 2021
   },
-  "extends": ["eslint:recommended", "prettier"],
-  "plugins": ["prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-var-requires": "off"
   }
 }

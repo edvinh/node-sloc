@@ -1,5 +1,6 @@
-const fs = require('graceful-fs')
-const utils = require('./utils')
+import { Options, SLOC, SLOCResult } from './types'
+import fs from 'graceful-fs'
+import * as utils from './utils'
 
 /**
  * @typedef {Object}  Options
@@ -14,7 +15,7 @@ const utils = require('./utils')
  * @param  {Options} options           Options passed to the function.
  * @return {Promise}                   Resolves to an object containing SLOC and filepaths
  */
-const walkAndCount = (options) => {
+const walkAndCount = (options: Options): Promise<SLOCResult> => {
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(options.path)) {
       reject('No such file or path. Exiting.')
@@ -22,22 +23,23 @@ const walkAndCount = (options) => {
 
     if (fs.statSync(options.path).isFile()) {
       // If the file extension should be ignored, resolve with sloc: 0 and ignore the path
-      if (!utils.fileAllowed(options.path, options.extensions)) {
+      if (!utils.fileAllowed(options.path, options.extensions || [])) {
         resolve({ paths: [], sloc: {} })
       }
       utils.countSloc(options.path).then((res) => {
         // If the path argument is a file, count it
         resolve({
           paths: [options.path],
-          sloc: Object.assign({}, res, { files: 1, loc: res.sloc + res.comments }),
+          sloc: { ...res, files: 1, loc: (res.sloc || 0) + (res.comments || 0) },
+          // sloc: Object.assign({}, res, { files: 1, loc: res.sloc + res.comments }),
         })
       })
     } else if (fs.statSync(options.path).isDirectory()) {
       utils
         .walk(options)
         .then((res) => {
-          let promises = []
-          let filteredPaths = utils.filterFiles(res, options.extensions)
+          const promises: Promise<SLOC>[] = []
+          const filteredPaths = utils.filterFiles(res, options.extensions || [])
           filteredPaths.forEach((fpath) => {
             promises.push(utils.countSloc(fpath))
           })
@@ -47,11 +49,11 @@ const walkAndCount = (options) => {
               let totSloc = 0
               let totBlank = 0
               let totComments = 0
-              let totFiles = filteredPaths.length
+              const totFiles = filteredPaths.length
               values.forEach((value) => {
-                totSloc += value.sloc
-                totBlank += value.blank
-                totComments += value.comments
+                totSloc += value.sloc || 0
+                totBlank += value.blank || 0
+                totComments += value.comments || 0
               })
               resolve({
                 paths: filteredPaths,
@@ -74,3 +76,5 @@ const walkAndCount = (options) => {
 module.exports = {
   walkAndCount,
 }
+
+export { walkAndCount }

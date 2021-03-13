@@ -3,16 +3,23 @@
   "version": "0.1.12",
   "description": "A small tool for counting SLOC.",
   "author": "Edvin Havic <edvinhavic@gmail.com>",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "start": "node index.js",
-    "test": "nyc --reporter=lcov node_modules/mocha/bin/_mocha -- -R spec",
+    "start": "npm run build && node lib/cli.js",
+    "build": "tsc -p ./tsconfig.json",
+    "build:watch": "tsc --watch",
+    "test": "nyc --reporter=lcov ts-mocha -- ./test/**/*.spec.ts",
+    "test:watch": "npm run test -- --watch",
     "prettier:base": "prettier --ignore-path .gitignore",
     "eslint:base": "eslint --ignore-path .gitignore",
-    "lint:eslint": "npm run eslint:base -- --max-warnings 0 **/*.js",
+    "lint:eslint": "npm run eslint:base -- --max-warnings 0 **/*.ts",
     "lint": "npm run lint:eslint",
-    "format:prettier": "npm run prettier:base -- --write **/*.js",
-    "format:eslint": "npm run eslint:base -- --fix **/*.js",
+    "format:prettier": "npm run prettier:base -- --write **/*.ts",
+    "format:eslint": "npm run eslint:base -- --fix **/*.ts",
     "format": "npm run format:eslint && npm run format:prettier"
   },
   "bin": {
@@ -33,14 +40,27 @@
     "minimist": "^1.2.5"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.15",
+    "@types/chai-as-promised": "^7.1.3",
+    "@types/expect": "^24.3.0",
+    "@types/graceful-fs": "^4.1.5",
+    "@types/micromatch": "^4.0.1",
+    "@types/minimist": "^1.2.1",
+    "@types/mocha": "^8.2.1",
+    "@types/node": "^14.14.32",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
     "chai": "^4.3.3",
     "chai-as-promised": "^7.1.1",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
+    "eslint-config-typescript": "^3.0.0",
     "eslint-plugin-prettier": "^3.3.1",
     "mocha": "^8.3.1",
     "nyc": "^15.1.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "ts-mocha": "^8.0.0",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": ">=8.0.0"

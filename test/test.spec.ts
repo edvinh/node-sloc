@@ -1,11 +1,12 @@
 /* eslint-env mocha */
-const chai = require('chai')
-const path = require('path')
-const expect = chai.expect
-const chaiAsPromised = require('chai-as-promised')
-chai.use(chaiAsPromised)
+import chai from 'chai'
+import path from 'path'
+import chaiAsPromised from 'chai-as-promised'
 
-const sloc = require('../src/index')
+import sloc from '../src'
+
+const expect = chai.expect
+chai.use(chaiAsPromised)
 
 describe('Result Properties', () => {
   it('should have correct properties', () => {
@@ -64,13 +65,13 @@ describe('Result Properties', () => {
     sloc(options, callback)
   })
 
-  it("should return error when callback isn't a function", () => {
+  it("should throw error when callback isn't a function", () => {
     const options = {
       path: 'test/test_assets/file.c',
     }
 
-    const err = sloc(options, 'callback')
-    return expect(err).to.be.instanceof(Error)
+    const err = () => sloc(options, 'callback')
+    return expect(err).to.throw
   })
 })
 

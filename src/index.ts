@@ -1,5 +1,8 @@
-const sloc = require('./sloc')
-const allowedExtensions = require('./file-extensions').map((x) => x.lang)
+import { Options, SLOCResult, Callback } from './types'
+import * as sloc from './sloc'
+import { extensions as fileExtensions } from './file-extensions'
+
+const allowedExtensions = fileExtensions.map((x) => x.lang)
 
 /**
  * @typedef  {Object}      Options
@@ -13,11 +16,11 @@ const allowedExtensions = require('./file-extensions').map((x) => x.lang)
 /**
  * Reads a specified file/directory and counts the SLOC.
  * If a directory is supplied the function will walk the directory recursively and count the SLOC.
- * @param  {Options} options     The options. See object options.
- * @param {Function} [callback]  The callback function, if node-style callbacks are preferred over promises.
- * @return {Promise}             If no callback is supplied, it returns a promise which will resolve to an object with properties `sloc` and `paths`.
+ * @param  {Options}  options     The options. See object options.
+ * @param  {Function} [callback]  The callback function, if node-style callbacks are preferred over promises.
+ * @return {Promise}              If no callback is supplied, it returns a promise which will resolve to an object with properties `sloc` and `paths`.
  */
-module.exports = (options, callback) => {
+const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult> | null => {
   // Check if options object is valid
   if (typeof options !== 'object' || !options) {
     return Promise.reject(new Error('Parameter `options` must be an object.'))
@@ -35,7 +38,7 @@ module.exports = (options, callback) => {
   }
 
   let extensions = allowedExtensions
-  let ignorePaths = options.ignorePaths || []
+  const ignorePaths = options.ignorePaths || []
   if (options.extensions) {
     // Don't use the default extensions if ignoreDefault is true
     const ext = options.ignoreDefault ? [] : allowedExtensions
@@ -54,7 +57,7 @@ module.exports = (options, callback) => {
 
   // Else use node-style callback
   if (typeof callback !== 'function') {
-    return new Error('type mismatch: callback must be a function')
+    throw new Error('type mismatch: callback must be a function')
   }
 
   sloc
@@ -69,3 +72,6 @@ module.exports = (options, callback) => {
 
   return null
 }
+
+module.exports = nodeSloc
+export default nodeSloc

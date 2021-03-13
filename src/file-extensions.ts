@@ -1,10 +1,12 @@
 // All allowed file extensions
 
+import { FileExtension } from './types'
+
 const cStyleComments = { line: '//', multi: { start: '/*', end: '*/' } }
 const elixirStyleCommens = { line: '#', multi: { start: null, end: null } }
 const htmlStyleComments = { line: null, multi: { start: '<!--', end: '-->' } }
 
-module.exports = [
+const extensions: FileExtension[] = [
   {
     lang: 'as',
     comments: cStyleComments,
@@ -214,3 +216,6 @@ module.exports = [
     comments: elixirStyleCommens,
   },
 ]
+
+module.exports = { extensions, cStyleComments }
+export { cStyleComments, extensions }

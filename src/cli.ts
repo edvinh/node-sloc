@@ -1,14 +1,19 @@
-const chalk = require('chalk')
-const args = require('minimist')(process.argv.slice(2))
-const sloc = require('./sloc')
-const utils = require('./utils')
-const { version } = require('../package.json')
-const allowedExtensions = require('./file-extensions').map((x) => x.lang)
+import chalk from 'chalk'
+import * as sloc from './sloc'
+import * as utils from './utils'
+import { extensions as fileExtensions } from './file-extensions'
+import minimist from 'minimist'
+import { Options } from './types'
+
+const allowedExtensions = fileExtensions.map((x) => x.lang)
+const args = minimist(process.argv.slice(2))
 
 const info = chalk.bold.blue
 const output = chalk.bold.gray
 const error = chalk.bold.red
 const result = chalk.bold.green
+
+const { version } = require('../package.json')
 
 const helpText = `
   node-sloc v. ${version}
@@ -40,12 +45,12 @@ const helpText = `
    `
 
 let extensions = allowedExtensions
-let extraExtensions = []
-let ignoreExtensions = []
-let ignorePaths = []
+let extraExtensions: string[] = []
+let ignoreExtensions: string[] = []
+let ignorePaths: string[] = []
 
-const handleExtensionString = (param, shorthand) => {
-  let arg = args[param] || args[shorthand]
+const handleExtensionString = (param: string, shorthand: string) => {
+  const arg = args[param] || args[shorthand]
   if (!arg) {
     console.log(error(`Missing argument for --${param}`))
     process.exit(0)
@@ -55,8 +60,8 @@ const handleExtensionString = (param, shorthand) => {
   return arg.replace(/ |\.|\\|\//g, '').split(',')
 }
 
-const handlePathString = (param, shorthand) => {
-  let arg = args[param] || args[shorthand]
+const handlePathString = (param: string, shorthand: string) => {
+  const arg = args[param] || args[shorthand]
   if (!arg) {
     console.log(error(`Missing argument for --${param}`))
     process.exit(0)
@@ -115,10 +120,10 @@ const filteredExtensions = [...extensions, ...extraExtensions].filter(
   (e) => !ignoreExtensions.includes(e)
 )
 
-const options = {
+const options: Options = {
   path: filepath,
   extensions: filteredExtensions,
-  logger: args.verbose || args.v ? (v) => console.log(output(v)) : null,
+  logger: args.verbose || args.v ? (v) => console.log(output(v)) : undefined,
   ignorePaths: ignorePaths,
 }
 

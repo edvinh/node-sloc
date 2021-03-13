@@ -1,9 +1,11 @@
-const path = require('path')
-const readline = require('readline')
-const fs = require('graceful-fs')
-const { promisify } = require('util')
-const allowedExtensions = require('./file-extensions.js')
-const { isMatch } = require('micromatch')
+import { FileExtension, Options, SLOC, SLOCResult } from './types'
+import { extensions as allowedExtensions, cStyleComments } from './file-extensions'
+
+import path from 'path'
+import readline from 'readline'
+import fs, { Stats } from 'graceful-fs'
+import { promisify } from 'util'
+import { isMatch } from 'micromatch'
 
 const readdirAsync = promisify(fs.readdir)
 const statAsync = promisify(fs.stat)
@@ -16,20 +18,20 @@ const statAsync = promisify(fs.stat)
  * @param  {function} [logger]   The function outputs extra information to this function if specified.
  * @return {Promise}             Resolves to an array of filepaths
  */
-const walk = (options) => {
+const walk = (options: Options): Promise<string[]> => {
   return new Promise((resolve, reject) => {
-    let results = []
+    let results: string[] = []
     readdirAsync(options.path)
-      .then((files) => {
+      .then((files: string[]) => {
         let len = files.length
         if (!len) {
           resolve(results)
         }
 
-        files.forEach((file) => {
+        files.forEach((file: string) => {
           const dirFile = path.join(options.path, file)
 
-          if (isMatch(dirFile, options.ignorePaths)) {
+          if (isMatch(dirFile, options.ignorePaths || [])) {
             len--
             if (!len) {
               resolve(results)
@@ -39,7 +41,7 @@ const walk = (options) => {
           }
 
           statAsync(dirFile)
-            .then((stat) => {
+            .then((stat: Stats) => {
               if (stat.isFile()) {
                 len--
                 results.push(dirFile)
@@ -50,7 +52,7 @@ const walk = (options) => {
                   resolve(results)
                 }
               } else if (stat.isDirectory()) {
-                if (isMatch(dirFile, options.ignorePaths)) {
+                if (isMatch(dirFile, options.ignorePaths || [])) {
                   len--
                   if (!len) {
                     resolve(results)
@@ -68,12 +70,14 @@ const walk = (options) => {
                 })
               }
             })
-            .catch((err) => reject(err))
+            .catch((err: Error) => reject(err))
         })
       })
-      .catch((err) => reject(err))
+      .catch((err: Error) => reject(err))
   })
 }
+
+type PartialSLOC = Omit<SLOC, 'loc' | 'files'>
 
 /**
  * Counts the source lines of code in the given file, specified by the filepath.
@@ -81,10 +85,14 @@ const walk = (options) => {
  * @param  {string}  file  The filepath of the file to be read.
  * @return {Promise}       Resolves to an object containing the SLOC count.
  */
-const countSloc = (file) => {
+const countSloc = (file: string): Promise<PartialSLOC> => {
   return new Promise((resolve, reject) => {
-    const extension = file.split('.').pop().toLowerCase() // get the file extension
+    const extension = file.split('.').pop()?.toLowerCase() // get the file extension
+
+    if (!extension) throw new Error(`No file extension on file: ${file}`)
+
     const comments = getCommentChars(extension)
+    const { start, end } = comments.multi
     let sloc = 0
     let numComments = 0
     let blankLines = 0
@@ -93,7 +101,7 @@ const countSloc = (file) => {
       input: fs.createReadStream(file),
     })
 
-    rl.on('line', (l) => {
+    rl.on('line', (l: string) => {
       const line = l.trim() // Trim the line to remove white space
       // Exclude empty lines
       if (line.length === 0) {
@@ -102,8 +110,8 @@ const countSloc = (file) => {
       }
 
       // Check if a multi-line comment (comment block) starts
-      if (comments.multi && line.indexOf(comments.multi.start) === 0) {
-        const commentEnd = line.indexOf(comments.multi.end)
+      if (start && end && line.startsWith(start)) {
+        const commentEnd = line.indexOf(end)
         numComments++
 
         // Check if the multi-line comment ends at the same line
@@ -116,7 +124,7 @@ const countSloc = (file) => {
       }
 
       // Check if we're in a multi-line comment and if the comment ends on this line
-      if (inMultiline && line.indexOf(comments.multi.end) !== -1) {
+      if (inMultiline && end && line.indexOf(end) !== -1) {
         numComments++
         inMultiline = false
         return
@@ -137,25 +145,25 @@ const countSloc = (file) => {
       sloc++
     })
 
-    rl.on('error', (err) => reject(err))
+    rl.on('error', (err: Error) => reject(err))
     rl.on('close', () => resolve({ sloc: sloc, comments: numComments, blank: blankLines }))
   })
 }
 
 /* Checks if a file extension is allowed. */
-const fileAllowed = (file, extensions) => {
-  const extension = file.split('.').pop().toLowerCase() // get the file extension
-  return extensions.includes(extension) // check if it exists in the given array
+const fileAllowed = (file: string, extensions: string[]): boolean => {
+  const extension = file.split('.').pop()?.toLowerCase() // get the file extension
+  return extensions.includes(extension || '') // check if it exists in the given array
 }
 
 /* Filters an array of filenames and returns a list of allowed files. */
-const filterFiles = (files, extensions) => {
-  return files.filter((file) => {
+const filterFiles = (files: string[], extensions: string[]): string[] => {
+  return files.filter((file: string) => {
     return fileAllowed(file, extensions)
   })
 }
 
-const prettyPrint = (obj) => {
+const prettyPrint = (obj: SLOCResult): string => {
   const str = `
     +---------------------------------------------------+
     | SLOC                          | ${obj.sloc.sloc} \t\t|
@@ -173,16 +181,13 @@ const prettyPrint = (obj) => {
 }
 
 /* Returns the comment syntax for specific languages */
-function getCommentChars(extension) {
-  const ext = allowedExtensions.find((x) => x.lang === extension)
+function getCommentChars(extension: string): FileExtension['comments'] {
+  const ext = allowedExtensions.find((x: FileExtension) => x.lang === extension)
 
   if (ext) {
     return ext.comments
   } else {
-    return {
-      line: '//',
-      multi: { start: '/*', end: '*/' },
-    }
+    return cStyleComments
   }
 }
 
@@ -193,3 +198,5 @@ module.exports = {
   fileAllowed,
   prettyPrint,
 }
+
+export { walk, countSloc, filterFiles, fileAllowed, prettyPrint }
