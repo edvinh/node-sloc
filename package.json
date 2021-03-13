@@ -8,6 +8,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "node-sloc": "bin/node-sloc.js"
+  },
   "scripts": {
     "start": "npm run build && node lib/cli.js",
     "build": "tsc -p ./tsconfig.json",
@@ -22,8 +25,11 @@
     "format:eslint": "npm run eslint:base -- --fix **/*.ts",
     "format": "npm run format:eslint && npm run format:prettier"
   },
-  "bin": {
-    "node-sloc": "bin/node-sloc.js"
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm test",
+      "pre-push": "npm run lint && npm test"
+    }
   },
   "repository": {
     "type": "git",
@@ -56,6 +62,7 @@
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-typescript": "^3.0.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^4.3.8",
     "mocha": "^8.3.1",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
