@@ -2,9 +2,9 @@
 
 import { FileExtension } from './types'
 
-const cStyleComments = { line: '//', multi: { start: '/*', end: '*/' } }
-const elixirStyleCommens = { line: '#', multi: { start: null, end: null } }
-const htmlStyleComments = { line: null, multi: { start: '<!--', end: '-->' } }
+const cStyleComments = { line: '//', block: { start: '/*', end: '*/' } }
+const elixirStyleCommens = { line: '#', block: null }
+const htmlStyleComments = { line: null, block: { start: '<!--', end: '-->' } }
 
 const extensions: FileExtension[] = [
   {
@@ -13,7 +13,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'asm',
-    comments: { line: ';', multi: { start: null, end: null } },
+    comments: { line: ';', block: null },
   },
   {
     lang: 'c',
@@ -25,7 +25,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'coffee',
-    comments: { line: '#', multi: { start: '###', end: '###' } },
+    comments: { line: '#', block: { start: '###', end: '###' } },
   },
   {
     lang: 'cpp',
@@ -37,7 +37,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'css',
-    comments: { line: null, multi: { start: '/*', end: '*/' } },
+    comments: { line: null, block: { start: '/*', end: '*/' } },
   },
   {
     lang: 'cxx',
@@ -45,11 +45,11 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'elm',
-    comments: { line: '--', multi: { start: '{-', end: '-}' } },
+    comments: { line: '--', block: { start: '{-', end: '-}' } },
   },
   {
     lang: 'erl',
-    comments: { line: '%', multi: { start: null, end: null } },
+    comments: { line: '%', block: null },
   },
   {
     lang: 'ex',
@@ -73,11 +73,11 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'hbs',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'handlebars',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'hpp',
@@ -85,7 +85,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'hs',
-    comments: { line: '--', multi: { start: null, end: null } },
+    comments: { line: '--', block: null },
   },
   {
     lang: 'htm',
@@ -105,7 +105,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'jade',
-    comments: { line: '//', multi: { start: null, end: null } },
+    comments: { line: '//', block: null },
   },
   {
     lang: 'java',
@@ -125,7 +125,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'lua',
-    comments: { line: '--', multi: { start: '--[[', end: ']]' } },
+    comments: { line: '--', block: { start: '--[[', end: ']]' } },
   },
   {
     lang: 'm',
@@ -137,11 +137,11 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'mustache',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'nut',
-    comments: { line: '#', multi: { start: '/*', end: '*/' } },
+    comments: { line: '#', block: { start: '/*', end: '*/' } },
   },
   {
     lang: 'pl',
@@ -157,11 +157,11 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'py',
-    comments: { line: '#', multi: { start: '"""', end: '"""' } },
+    comments: { line: '#', block: { start: '"""', end: '"""' } },
   },
   {
     lang: 'rb',
-    comments: { line: '#', multi: { start: '=begin', end: '=end' } },
+    comments: { line: '#', block: { start: '=begin', end: '=end' } },
   },
   {
     lang: 'rs',
@@ -201,7 +201,7 @@ const extensions: FileExtension[] = [
   },
   {
     lang: 'vb',
-    comments: { line: "'", multi: { start: null, end: null } },
+    comments: { line: "'", block: null },
   },
   {
     lang: 'xml',

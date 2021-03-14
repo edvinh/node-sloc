@@ -3,7 +3,7 @@ import { extensions as allowedExtensions, cStyleComments } from './file-extensio
 
 import path from 'path'
 import readline from 'readline'
-import fs, { Stats } from 'graceful-fs'
+import fs from 'graceful-fs'
 import { promisify } from 'util'
 import { isMatch } from 'micromatch'
 
@@ -22,7 +22,7 @@ const walk = (options: Options): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     let results: string[] = []
     readdirAsync(options.path)
-      .then((files: string[]) => {
+      .then((files) => {
         let len = files.length
         if (!len) {
           resolve(results)
@@ -36,12 +36,11 @@ const walk = (options: Options): Promise<string[]> => {
             if (!len) {
               resolve(results)
             }
-
             return
           }
 
           statAsync(dirFile)
-            .then((stat: Stats) => {
+            .then((stat) => {
               if (stat.isFile()) {
                 len--
                 results.push(dirFile)
@@ -60,17 +59,16 @@ const walk = (options: Options): Promise<string[]> => {
                 walk({ ...options, path: dirFile }).then((res) => {
                   len--
                   results = results.concat(res)
-
                   if (!len) {
                     resolve(results)
                   }
                 })
               }
             })
-            .catch((err: Error) => reject(err))
+            .catch((err) => reject(err))
         })
       })
-      .catch((err: Error) => reject(err))
+      .catch((err) => reject(err))
   })
 }
 
@@ -87,11 +85,11 @@ const countSloc = (file: string): Promise<FileSLOC> => {
     if (!extension) throw new Error(`No file extension on file: ${file}`)
 
     const comments = getCommentChars(extension)
-    const { start, end } = comments.multi
+    const { start, end } = comments.block || {}
     let sloc = 0
     let numComments = 0
     let blankLines = 0
-    let inMultiline = false
+    let inBlock = false
     const rl = readline.createInterface({
       input: fs.createReadStream(file),
     })
@@ -104,28 +102,28 @@ const countSloc = (file: string): Promise<FileSLOC> => {
         return
       }
 
-      // Check if a multi-line comment (comment block) starts
+      // Check if a comment block starts
       if (start && end && line.startsWith(start)) {
         const commentEnd = line.indexOf(end)
         numComments++
 
-        // Check if the multi-line comment ends at the same line
+        // Check if the comment block ends at the same line
         if (commentEnd !== -1 && commentEnd !== 0) {
           return
         }
 
-        inMultiline = !inMultiline
+        inBlock = !inBlock
         return
       }
 
-      // Check if we're in a multi-line comment and if the comment ends on this line
-      if (inMultiline && end && line.indexOf(end) !== -1) {
+      // Check if we're in a comment block and if the comment ends on this line
+      if (inBlock && end && line.indexOf(end) !== -1) {
         numComments++
-        inMultiline = false
+        inBlock = false
         return
       }
 
-      if (inMultiline) {
+      if (inBlock) {
         numComments++
         return
       }
@@ -140,9 +138,14 @@ const countSloc = (file: string): Promise<FileSLOC> => {
       sloc++
     })
 
-    rl.on('error', (err: Error) => reject(err))
+    rl.on('error', (err) => reject(err))
     rl.on('close', () =>
-      resolve({ sloc: sloc, comments: numComments, blank: blankLines, loc: numComments + sloc })
+      resolve({
+        sloc: sloc,
+        comments: numComments,
+        blank: blankLines,
+        loc: numComments + sloc,
+      })
     )
   })
 }

@@ -14,6 +14,7 @@ export interface FileSLOC {
   blank: number
   comments: number
 }
+
 export interface SLOC extends FileSLOC {
   files: number
 }
@@ -27,9 +28,9 @@ export interface FileExtension {
   lang: string
   comments: {
     line: string | null
-    multi: {
-      start: string | null
-      end: string | null
-    }
+    block: {
+      start: string
+      end: string
+    } | null
   }
 }
