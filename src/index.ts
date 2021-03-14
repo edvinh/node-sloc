@@ -21,7 +21,10 @@ const allowedExtensions = fileExtensions.map((x) => x.lang)
  * @return {Promise}              If no callback is supplied, it returns a promise which will resolve to an object with
  *                                properties `sloc` and `paths` (or null if no path matched).
  */
-const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult | null> | null => {
+const nodeSloc = (
+  options: Options,
+  callback?: Callback
+): Promise<SLOCResult | null> | undefined => {
   // Check if options object is valid
   if (typeof options !== 'object' || !options) {
     return Promise.reject(new Error('Parameter `options` must be an object.'))
@@ -46,14 +49,16 @@ const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult | n
     extensions = [...ext, ...options.extensions]
   }
 
+  const opts: Options = {
+    path: options.path,
+    logger: options.logger,
+    extensions,
+    ignorePaths,
+  }
+
   // If no callback is provided, use promises
   if (!callback) {
-    return sloc.walkAndCount({
-      path: options.path,
-      logger: options.logger,
-      extensions,
-      ignorePaths,
-    })
+    return sloc.walkAndCount(opts)
   }
 
   // Else use node-style callback
@@ -62,16 +67,9 @@ const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult | n
   }
 
   sloc
-    .walkAndCount({
-      path: options.path,
-      logger: options.logger,
-      extensions,
-      ignorePaths,
-    })
+    .walkAndCount(opts)
     .then((res) => callback(null, res))
     .catch((err) => callback(err, null))
-
-  return null
 }
 
 export default nodeSloc
