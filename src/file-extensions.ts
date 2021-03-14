@@ -1,17 +1,19 @@
 // All allowed file extensions
 
-const cStyleComments = { line: '//', multi: { start: '/*', end: '*/' } }
-const elixirStyleCommens = { line: '#', multi: { start: null, end: null } }
-const htmlStyleComments = { line: null, multi: { start: '<!--', end: '-->' } }
+import { FileExtension } from './types'
 
-module.exports = [
+const cStyleComments = { line: '//', block: { start: '/*', end: '*/' } }
+const elixirStyleCommens = { line: '#', block: null }
+const htmlStyleComments = { line: null, block: { start: '<!--', end: '-->' } }
+
+const extensions: FileExtension[] = [
   {
     lang: 'as',
     comments: cStyleComments,
   },
   {
     lang: 'asm',
-    comments: { line: ';', multi: { start: null, end: null } },
+    comments: { line: ';', block: null },
   },
   {
     lang: 'c',
@@ -23,7 +25,7 @@ module.exports = [
   },
   {
     lang: 'coffee',
-    comments: { line: '#', multi: { start: '###', end: '###' } },
+    comments: { line: '#', block: { start: '###', end: '###' } },
   },
   {
     lang: 'cpp',
@@ -35,7 +37,7 @@ module.exports = [
   },
   {
     lang: 'css',
-    comments: { line: null, multi: { start: '/*', end: '*/' } },
+    comments: { line: null, block: { start: '/*', end: '*/' } },
   },
   {
     lang: 'cxx',
@@ -43,11 +45,11 @@ module.exports = [
   },
   {
     lang: 'elm',
-    comments: { line: '--', multi: { start: '{-', end: '-}' } },
+    comments: { line: '--', block: { start: '{-', end: '-}' } },
   },
   {
     lang: 'erl',
-    comments: { line: '%', multi: { start: null, end: null } },
+    comments: { line: '%', block: null },
   },
   {
     lang: 'ex',
@@ -71,11 +73,11 @@ module.exports = [
   },
   {
     lang: 'hbs',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'handlebars',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'hpp',
@@ -83,7 +85,7 @@ module.exports = [
   },
   {
     lang: 'hs',
-    comments: { line: '--', multi: { start: null, end: null } },
+    comments: { line: '--', block: null },
   },
   {
     lang: 'htm',
@@ -103,7 +105,7 @@ module.exports = [
   },
   {
     lang: 'jade',
-    comments: { line: '//', multi: { start: null, end: null } },
+    comments: { line: '//', block: null },
   },
   {
     lang: 'java',
@@ -123,7 +125,7 @@ module.exports = [
   },
   {
     lang: 'lua',
-    comments: { line: '--', multi: { start: '--[[', end: ']]' } },
+    comments: { line: '--', block: { start: '--[[', end: ']]' } },
   },
   {
     lang: 'm',
@@ -135,11 +137,11 @@ module.exports = [
   },
   {
     lang: 'mustache',
-    comments: { line: null, multi: { start: '{{!', end: '}}' } },
+    comments: { line: null, block: { start: '{{!', end: '}}' } },
   },
   {
     lang: 'nut',
-    comments: { line: '#', multi: { start: '/*', end: '*/' } },
+    comments: { line: '#', block: { start: '/*', end: '*/' } },
   },
   {
     lang: 'pl',
@@ -155,11 +157,11 @@ module.exports = [
   },
   {
     lang: 'py',
-    comments: { line: '#', multi: { start: '"""', end: '"""' } },
+    comments: { line: '#', block: { start: '"""', end: '"""' } },
   },
   {
     lang: 'rb',
-    comments: { line: '#', multi: { start: '=begin', end: '=end' } },
+    comments: { line: '#', block: { start: '=begin', end: '=end' } },
   },
   {
     lang: 'rs',
@@ -199,7 +201,7 @@ module.exports = [
   },
   {
     lang: 'vb',
-    comments: { line: "'", multi: { start: null, end: null } },
+    comments: { line: "'", block: null },
   },
   {
     lang: 'xml',
@@ -214,3 +216,5 @@ module.exports = [
     comments: elixirStyleCommens,
   },
 ]
+
+export { cStyleComments, extensions }
