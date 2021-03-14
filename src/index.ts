@@ -75,3 +75,6 @@ const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult | n
 }
 
 export default nodeSloc
+
+// CommonJS support
+module.exports = exports = nodeSloc
