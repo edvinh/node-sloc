@@ -32,7 +32,8 @@ const walkAndCount = (options: Options): Promise<SLOCResult | null> => {
         // If the path argument is a file, count it
         resolve({
           paths: [options.path],
-          sloc: { ...res, files: 1 },
+          files: 1,
+          ...res,
         })
       })
     } else if (fs.statSync(options.path).isDirectory()) {
@@ -60,10 +61,8 @@ const walkAndCount = (options: Options): Promise<SLOCResult | null> => {
 
               resolve({
                 paths: filteredPaths,
-                sloc: {
-                  ...slocSum,
-                  files: totFiles,
-                },
+                ...slocSum,
+                files: totFiles,
               })
             })
             .catch((err) => reject(`Error when walking directory: ${err}`))

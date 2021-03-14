@@ -36,12 +36,9 @@ export interface SLOC extends FileSLOC {
   files: number
 }
 
-export interface SLOCResult {
+export interface SLOCResult extends SLOC {
   /** Array of filepaths that have been checked. */
   paths: string[]
-
-  /** The resulting count for all paths. */
-  sloc: SLOC
 }
 
 export interface FileExtension {

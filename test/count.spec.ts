@@ -38,7 +38,7 @@ describe('Count', () => {
 
     const result = sloc(options)
     return result.then((res) => {
-      return expect(res.sloc.files).to.eql(4)
+      return expect(res.files).to.eql(4)
     })
   })
 
@@ -51,7 +51,7 @@ describe('Count', () => {
 
     const result = sloc(options)
     return result.then((res) => {
-      return expect(res.sloc.files).to.eql(4)
+      return expect(res.files).to.eql(4)
     })
   })
 
@@ -63,13 +63,11 @@ describe('Count', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/file.c'],
-      sloc: {
-        sloc: 47,
-        comments: 16,
-        blank: 7,
-        files: 1,
-        loc: 63,
-      },
+      sloc: 47,
+      comments: 16,
+      blank: 7,
+      files: 1,
+      loc: 63,
     })
   })
 
@@ -81,13 +79,11 @@ describe('Count', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/onlycomments.c'],
-      sloc: {
-        sloc: 0,
-        comments: 66,
-        blank: 0,
-        files: 1,
-        loc: 66,
-      },
+      sloc: 0,
+      comments: 66,
+      blank: 0,
+      files: 1,
+      loc: 66,
     })
   })
 
@@ -99,13 +95,11 @@ describe('Count', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/empty.c'],
-      sloc: {
-        sloc: 0,
-        comments: 0,
-        blank: 0,
-        files: 1,
-        loc: 0,
-      },
+      sloc: 0,
+      comments: 0,
+      blank: 0,
+      files: 1,
+      loc: 0,
     })
   })
 
@@ -119,13 +113,11 @@ describe('Count', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/otherextension.qq'],
-      sloc: {
-        sloc: 3,
-        comments: 6,
-        blank: 0,
-        files: 1,
-        loc: 9,
-      },
+      sloc: 3,
+      comments: 6,
+      blank: 0,
+      files: 1,
+      loc: 9,
     })
   })
 
@@ -140,8 +132,12 @@ describe('Count', () => {
       if (err) {
         done(err)
       } else {
+        // Ignore paths in this test
+        const resWithoutPaths = { ...res }
+        delete resWithoutPaths.paths
+
         try {
-          expect(res.sloc).to.be.eql({
+          expect(resWithoutPaths).to.be.eql({
             sloc: 50,
             comments: 88,
             blank: 7,

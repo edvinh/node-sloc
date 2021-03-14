@@ -18,10 +18,10 @@ describe('Result Properties', () => {
 
     return Promise.all([
       expect(result.then((o) => o)).to.eventually.have.property('paths'),
-      expect(result.then((o) => o.sloc)).to.eventually.have.property('sloc'),
-      expect(result.then((o) => o.sloc)).to.eventually.have.property('loc'),
-      expect(result.then((o) => o.sloc)).to.eventually.have.property('blank'),
-      expect(result.then((o) => o.sloc)).to.eventually.have.property('comments'),
+      expect(result.then((o) => o)).to.eventually.have.property('sloc'),
+      expect(result.then((o) => o)).to.eventually.have.property('loc'),
+      expect(result.then((o) => o)).to.eventually.have.property('blank'),
+      expect(result.then((o) => o)).to.eventually.have.property('comments'),
     ])
   })
 

@@ -128,14 +128,12 @@ The object returned when executing the function has the following structure:
 
 ```js
 {
-  paths,        // An array of all filepaths counted
-  sloc: {       // Object containing the data
-    loc,        // Lines of code (SLOC + comments)
-    sloc,       // Source lines of code
-    blank,      // Number of blank lines
-    comments,   // Lines of comments
-    files,      // Number of files counted
-  }
+  paths,      // An array of all filepaths counted
+  loc,        // Lines of code (SLOC + comments)
+  sloc,       // Source lines of code
+  blank,      // Number of blank lines
+  comments,   // Lines of comments
+  files,      // Number of files counted
 }
 ```
 
@@ -154,7 +152,7 @@ const options = {
 
 // Using promises
 sloc(options).then((res) => {
-  console.log(res.paths, res.sloc.sloc, res.sloc.comments)
+  console.log(res.paths, res.sloc, res.comments)
 })
 
 // Using node-style callbacks
@@ -162,7 +160,7 @@ sloc(options, (err, res) => {
   if (err) {
     // do some error handling
   }
-  console.log(res.paths, res.sloc.sloc, res.sloc.comments)
+  console.log(res.paths, res.sloc, res.comments)
 })
 
 // Async-await (if supported)

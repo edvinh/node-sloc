@@ -17,13 +17,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.html'],
-      sloc: {
-        sloc: 8,
-        comments: 5,
-        blank: 2,
-        files: 1,
-        loc: 13,
-      },
+      sloc: 8,
+      comments: 5,
+      blank: 2,
+      files: 1,
+      loc: 13,
     })
   })
 
@@ -35,13 +33,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.ex'],
-      sloc: {
-        sloc: 4,
-        comments: 4,
-        blank: 2,
-        files: 1,
-        loc: 8,
-      },
+      sloc: 4,
+      comments: 4,
+      blank: 2,
+      files: 1,
+      loc: 8,
     })
   })
 
@@ -53,13 +49,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.py'],
-      sloc: {
-        sloc: 6,
-        comments: 5,
-        blank: 0,
-        files: 1,
-        loc: 11,
-      },
+      sloc: 6,
+      comments: 5,
+      blank: 0,
+      files: 1,
+      loc: 11,
     })
   })
 
@@ -71,13 +65,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.lua'],
-      sloc: {
-        sloc: 6,
-        comments: 5,
-        blank: 0,
-        files: 1,
-        loc: 11,
-      },
+      sloc: 6,
+      comments: 5,
+      blank: 0,
+      files: 1,
+      loc: 11,
     })
   })
 
@@ -89,13 +81,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.nut'],
-      sloc: {
-        sloc: 2,
-        comments: 5,
-        blank: 0,
-        files: 1,
-        loc: 7,
-      },
+      sloc: 2,
+      comments: 5,
+      blank: 0,
+      files: 1,
+      loc: 7,
     })
   })
 
@@ -107,13 +97,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.coffee'],
-      sloc: {
-        sloc: 7,
-        comments: 8,
-        blank: 4,
-        files: 1,
-        loc: 15,
-      },
+      sloc: 7,
+      comments: 8,
+      blank: 4,
+      files: 1,
+      loc: 15,
     })
   })
 
@@ -125,13 +113,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.rb'],
-      sloc: {
-        sloc: 12,
-        comments: 5,
-        blank: 2,
-        files: 1,
-        loc: 17,
-      },
+      sloc: 12,
+      comments: 5,
+      blank: 2,
+      files: 1,
+      loc: 17,
     })
   })
 
@@ -143,13 +129,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.hs'],
-      sloc: {
-        sloc: 8,
-        comments: 2,
-        blank: 0,
-        files: 1,
-        loc: 10,
-      },
+      sloc: 8,
+      comments: 2,
+      blank: 0,
+      files: 1,
+      loc: 10,
     })
   })
 
@@ -161,13 +145,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.mustache'],
-      sloc: {
-        sloc: 6,
-        comments: 5,
-        blank: 0,
-        files: 1,
-        loc: 11,
-      },
+      sloc: 6,
+      comments: 5,
+      blank: 0,
+      files: 1,
+      loc: 11,
     })
   })
 
@@ -179,13 +161,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.hbs'],
-      sloc: {
-        sloc: 6,
-        comments: 5,
-        blank: 1,
-        files: 1,
-        loc: 11,
-      },
+      sloc: 6,
+      comments: 5,
+      blank: 1,
+      files: 1,
+      loc: 11,
     })
   })
 
@@ -197,13 +177,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.erl'],
-      sloc: {
-        sloc: 2,
-        comments: 3,
-        blank: 0,
-        files: 1,
-        loc: 5,
-      },
+      sloc: 2,
+      comments: 3,
+      blank: 0,
+      files: 1,
+      loc: 5,
     })
   })
 
@@ -215,13 +193,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.pl'],
-      sloc: {
-        sloc: 3,
-        comments: 2,
-        blank: 0,
-        files: 1,
-        loc: 5,
-      },
+      sloc: 3,
+      comments: 2,
+      blank: 0,
+      files: 1,
+      loc: 5,
     })
   })
 
@@ -233,13 +209,11 @@ describe('Comment parsing', () => {
     const result = sloc(options)
     return expect(result).to.eventually.eql({
       paths: ['test/test_assets/lang/file.elm'],
-      sloc: {
-        sloc: 5,
-        comments: 6,
-        blank: 4,
-        files: 1,
-        loc: 11,
-      },
+      sloc: 5,
+      comments: 6,
+      blank: 4,
+      files: 1,
+      loc: 11,
     })
   })
 })

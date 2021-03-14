@@ -166,15 +166,15 @@ const filterFiles = (files: string[], extensions: string[]): string[] => {
 const prettyPrint = (obj: SLOCResult): string => {
   const str = `
     +---------------------------------------------------+
-    | SLOC                          | ${obj.sloc.sloc} \t\t|
+    | SLOC                          | ${obj.sloc} \t\t|
     |-------------------------------|--------------------
-    | Lines of comments             | ${obj.sloc.comments} \t\t|
+    | Lines of comments             | ${obj.comments} \t\t|
     |-------------------------------|--------------------
-    | Blank lines                   | ${obj.sloc.blank} \t\t|
+    | Blank lines                   | ${obj.blank} \t\t|
     |-------------------------------|--------------------
-    | Files counted                 | ${obj.sloc.files} \t\t|
+    | Files counted                 | ${obj.files} \t\t|
     |-------------------------------|--------------------
-    | Total LOC                     | ${obj.sloc.loc} \t\t|
+    | Total LOC                     | ${obj.loc} \t\t|
     +---------------------------------------------------+
   `
   return str
