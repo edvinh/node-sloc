@@ -130,8 +130,8 @@ const options: Options = {
 sloc
   .walkAndCount(options)
   .then((res) => {
-    // All res.sloc properties are undefined if the file extension was unknown
-    if (res.sloc.sloc === undefined) {
+    // res is null if no files were read
+    if (!res) {
       console.log(
         error('Unknown file extension. Use flag --extra-extensions to include extensions.')
       )

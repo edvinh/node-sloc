@@ -1,4 +1,4 @@
-import { FileExtension, Options, SLOC, SLOCResult } from './types'
+import { FileExtension, FileSLOC, Options, SLOCResult } from './types'
 import { extensions as allowedExtensions, cStyleComments } from './file-extensions'
 
 import path from 'path'
@@ -45,9 +45,7 @@ const walk = (options: Options): Promise<string[]> => {
               if (stat.isFile()) {
                 len--
                 results.push(dirFile)
-                if (options.logger) {
-                  options.logger(`Checking file: ${dirFile}`)
-                }
+                options.logger?.(`Checking file: ${dirFile}`)
                 if (!len) {
                   resolve(results)
                 }
@@ -59,8 +57,7 @@ const walk = (options: Options): Promise<string[]> => {
                   }
                   return
                 }
-
-                walk(Object.assign({}, options, { path: dirFile })).then((res) => {
+                walk({ ...options, path: dirFile }).then((res) => {
                   len--
                   results = results.concat(res)
 
@@ -77,15 +74,13 @@ const walk = (options: Options): Promise<string[]> => {
   })
 }
 
-type PartialSLOC = Omit<SLOC, 'loc' | 'files'>
-
 /**
  * Counts the source lines of code in the given file, specified by the filepath.
  *
  * @param  {string}  file  The filepath of the file to be read.
  * @return {Promise}       Resolves to an object containing the SLOC count.
  */
-const countSloc = (file: string): Promise<PartialSLOC> => {
+const countSloc = (file: string): Promise<FileSLOC> => {
   return new Promise((resolve, reject) => {
     const extension = file.split('.').pop()?.toLowerCase() // get the file extension
 
@@ -146,7 +141,9 @@ const countSloc = (file: string): Promise<PartialSLOC> => {
     })
 
     rl.on('error', (err: Error) => reject(err))
-    rl.on('close', () => resolve({ sloc: sloc, comments: numComments, blank: blankLines }))
+    rl.on('close', () =>
+      resolve({ sloc: sloc, comments: numComments, blank: blankLines, loc: numComments + sloc })
+    )
   })
 }
 
@@ -189,14 +186,6 @@ function getCommentChars(extension: string): FileExtension['comments'] {
   } else {
     return cStyleComments
   }
-}
-
-module.exports = {
-  walk,
-  countSloc,
-  filterFiles,
-  fileAllowed,
-  prettyPrint,
 }
 
 export { walk, countSloc, filterFiles, fileAllowed, prettyPrint }

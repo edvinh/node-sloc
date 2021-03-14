@@ -217,5 +217,4 @@ const extensions: FileExtension[] = [
   },
 ]
 
-module.exports = { extensions, cStyleComments }
 export { cStyleComments, extensions }

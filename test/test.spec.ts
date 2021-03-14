@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-env mocha */
 import chai from 'chai'
 import path from 'path'
@@ -28,6 +29,7 @@ describe('Result Properties', () => {
   it("should reject promise when parameter isn't an object", () => {
     const options = 'str'
 
+    // @ts-ignore
     const result = sloc(options)
     return expect(result).to.be.rejected
   })
@@ -35,6 +37,7 @@ describe('Result Properties', () => {
   it('should reject promise when path is not supplied', () => {
     const options = {}
 
+    // @ts-ignore
     const result = sloc(options)
     return expect(result).to.be.rejected
   })
@@ -70,6 +73,7 @@ describe('Result Properties', () => {
       path: 'test/test_assets/file.c',
     }
 
+    // @ts-ignore
     const err = () => sloc(options, 'callback')
     return expect(err).to.throw
   })
@@ -85,7 +89,7 @@ describe('Count', () => {
     return expect(result).to.be.rejected
   })
 
-  it('should return object with empty `paths` and `sloc` properties when ignoring file type', () => {
+  it('should return null when ignoring file type', () => {
     const options = {
       path: 'test/test_assets/file.c',
       ignoreDefault: true,
@@ -93,10 +97,7 @@ describe('Count', () => {
     }
 
     const result = sloc(options)
-    return expect(result).to.eventually.eql({
-      paths: [],
-      sloc: {},
-    })
+    return expect(result).to.eventually.eql(null)
   })
 
   it('should be able to exclude nested directories', () => {

@@ -6,14 +6,16 @@ export interface Options {
   logger?: (log: string) => void
 }
 
-export type Callback = (err: Error | null, result?: SLOCResult) => void
+export type Callback = (err: Error | null, result: SLOCResult | null) => void
 
-export interface SLOC {
-  loc?: number
-  sloc?: number
-  blank?: number
-  comments?: number
-  files?: number
+export interface FileSLOC {
+  loc: number
+  sloc: number
+  blank: number
+  comments: number
+}
+export interface SLOC extends FileSLOC {
+  files: number
 }
 
 export interface SLOCResult {

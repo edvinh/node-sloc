@@ -18,9 +18,10 @@ const allowedExtensions = fileExtensions.map((x) => x.lang)
  * If a directory is supplied the function will walk the directory recursively and count the SLOC.
  * @param  {Options}  options     The options. See object options.
  * @param  {Function} [callback]  The callback function, if node-style callbacks are preferred over promises.
- * @return {Promise}              If no callback is supplied, it returns a promise which will resolve to an object with properties `sloc` and `paths`.
+ * @return {Promise}              If no callback is supplied, it returns a promise which will resolve to an object with
+ *                                properties `sloc` and `paths` (or null if no path matched).
  */
-const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult> | null => {
+const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult | null> | null => {
   // Check if options object is valid
   if (typeof options !== 'object' || !options) {
     return Promise.reject(new Error('Parameter `options` must be an object.'))
@@ -68,10 +69,9 @@ const nodeSloc = (options: Options, callback?: Callback): Promise<SLOCResult> | 
       ignorePaths,
     })
     .then((res) => callback(null, res))
-    .catch((err) => callback(err))
+    .catch((err) => callback(err, null))
 
   return null
 }
 
-module.exports = nodeSloc
 export default nodeSloc
