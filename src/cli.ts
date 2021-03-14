@@ -21,7 +21,7 @@ const helpText = `
   usage:
              node-sloc [path] [options]
   options:
-             -h, --help                         Prints usage information (the one you're reading right now)
+             -h, --help                         Prints usage information
 
              -l, --list-extensions              Lists all default file extensions
 
@@ -38,9 +38,9 @@ const helpText = `
              -v, --verbose                      Output extra information during execution
 
   examples:
-             node-sloc "../app"
-             node-sloc "../app" --include-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
-             node-sloc "../app" --ignore-paths "node_modules, **/*.test.js"
+             node-sloc ../app
+             node-sloc ../app --include-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
+             node-sloc ../app --ignore-paths "node_modules, **/*.test.js"
              node-sloc file.js
    `
 

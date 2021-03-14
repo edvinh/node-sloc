@@ -1,29 +1,48 @@
 # node-sloc
+
 A small tool written in node for counting source lines of code.
 
 [![NPM](https://nodei.co/npm/node-sloc.png)](https://nodei.co/npm/node-sloc/)
 
 ## Installation
+
 Can be used as either a command line application or as a module.
 
 ### As a command line application
+
+Install it globally and use it as a CLI -- both `node-sloc` and `sloc` will work in this case.
+
+```sh
+$ npm install -g node-sloc
+$ node-sloc .
+$ sloc . # Both node-sloc and sloc will run the CLI
 ```
-npm install -g node-sloc
+
+You can also run it with `npx`:
+
+```sh
+$ npx node-sloc .
 ```
+
 ### As a node module
+
 ```sh
 npm install --save node-sloc
 ```
+
 # Usage
+
 ## Command Line
-``` node-sloc [path] [options] ```
+
+`node-sloc [path] [options]`
 
 ### Options
+
 ```
 usage:
            node-sloc [path] [options]
 options:
-           -h, --help                         Prints usage information (the one you're reading right now)
+           -h, --help                         Prints usage information
 
            -l, --list-extensions              Lists all default file extensions
 
@@ -33,18 +52,20 @@ options:
            -i, --ignore-extensions <list>     Include list of file extensions to ignore,
                                               specified by a comma separated string of extensions
 
-           -x, --ignore-paths <list>          Include a list of folders to exclude
+           -x, --ignore-paths <list>          Include a list of folders to exclude. Supports glob patterns
 
            -d, --ignore-default               Ignore the default file extensions
 
            -v, --verbose                      Output extra information during execution
 
 ```
+
 ## Examples
+
 ```
- node-sloc "../app"
- node-sloc "../app" --include-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
- node-sloc "../app" --ignore-paths "node_modules"
+ node-sloc ../app
+ node-sloc ../app --include-extensions "aaa, bbb, ccc" --ignore-extensions "xml, yaml"
+ node-sloc ../app --ignore-paths "node_modules, **/*.test.js"
  node-sloc file.js
 ```
 
@@ -66,7 +87,10 @@ Reading file(s)...
 ```
 
 ## Module
-```
+
+### CommonJS
+
+```js
 const sloc = require('node-sloc')
 
 const options = {...}
@@ -74,17 +98,34 @@ const options = {...}
 sloc(options).then((res) => {...})
 ```
 
+### ES Modules
+
+```js
+// Named import is also supported, i.e.
+// import {sloc} from 'node-sloc'
+import sloc from 'node-sloc'
+
+const options = {...}
+
+sloc(options).then((res) => {...})
+```
+
 ### Options
+
 The options object the function takes as a parameter has the following properties:
+
 ```
 path             Required. The path to walk or file to read.
 extensions       Additional file extensions to look for. Required if ignoreDefault is set to true.
-ignorePaths      Optional. A list of directories to ignore.
+ignorePaths      Optional. A list of directories to ignore. Supports glob patterns.
 ignoreDefault    Optional. Whether to ignore the default file extensions or not. Defaults to false.
 logger           Optional. Outputs extra information to if specified.
 ```
+
 ### Resolved object
+
 The object returned when executing the function has the following structure:
+
 ```js
 {
   paths,        // An array of all filepaths counted
@@ -99,15 +140,16 @@ The object returned when executing the function has the following structure:
 ```
 
 ### Example
+
 ```js
 const sloc = require('node-sloc')
 
 const options = {
-  path: '../app',                      // Required. The path to walk or file to read.
-  extensions: ['aaa', 'bbb', 'ccc'],   // Additional file extensions to look for. Required if ignoreDefault is set to true.
-  ignorePaths: ['node_modules'],       // A list of directories to ignore.
-  ignoreDefault: false,                // Whether to ignore the default file extensions or not
-  logger: console.log,                 // Optional. Outputs extra information to if specified.
+  path: '../app', // Required. The path to walk or file to read.
+  extensions: ['aaa', 'bbb', 'ccc'], // Additional file extensions to look for. Required if ignoreDefault is set to true.
+  ignorePaths: ['node_modules'], // A list of directories to ignore. Supports glob patterns.
+  ignoreDefault: false, // Whether to ignore the default file extensions or not
+  logger: console.log, // Optional. Outputs extra information to if specified.
 }
 
 // Using promises
@@ -122,46 +164,53 @@ sloc(options, (err, res) => {
   }
   console.log(res.paths, res.sloc.sloc, res.sloc.comments)
 })
+
+// Async-await (if supported)
+const res = await sloc(options)
+console.log(res)
 ```
 
 ## Supported languages
-* ActionScript
-* Assembly
-* C#
-* C/C++
-* CoffeeScript
-* CSS
-* Elixir
-* Elm
-* Erlang
-* Go
-* Groovy
-* Handlebars
-* Haskell
-* HTML
-* Jade
-* Java
-* JavaScript
-* JSX
-* LESS
-* Lua
-* Mustache
-* Objective C/C++
-* Perl
-* PHP
-* Python
-* Ruby
-* Rust
-* Sass
-* Scala
-* Shell script
-* Squirrel
-* Stylus
-* Swift
-* TypeScript
-* Visual Basic
-* XML
-* YAML
+
+- ActionScript
+- Assembly
+- C#
+- C/C++
+- CoffeeScript
+- CSS
+- Elixir
+- Elm
+- Erlang
+- Go
+- Groovy
+- Handlebars
+- Haskell
+- HTML
+- Jade
+- Java
+- JavaScript
+- JSX
+- LESS
+- Lua
+- Mustache
+- Objective C
+- Perl
+- PHP
+- Python
+- Ruby
+- Rust
+- Sass
+- Scala
+- Shell script
+- Squirrel
+- Stylus
+- Swift
+- TypeScript
+- Visual Basic
+- XML
+- YAML
+- Any other language using C-style comments
 
 ## License
+
 MIT
