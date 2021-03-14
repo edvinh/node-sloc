@@ -4,17 +4,25 @@
   "description": "A small tool for counting SLOC.",
   "author": "Edvin Havic <edvinhavic@gmail.com>",
   "main": "lib/index.js",
-  "types": "lib/",
+  "type": "commonjs",
+  "types": "lib",
   "files": [
-    "lib"
+    "lib",
+    "bin",
+    "esm-wrapper.mjs"
   ],
   "bin": {
-    "node-sloc": "bin/node-sloc.js"
+    "node-sloc": "bin/node-sloc.js",
+    "sloc": "bin/node-sloc.js"
+  },
+  "exports": {
+    "import": "./esm-wrapper.mjs",
+    "require": "./lib/index.js"
   },
   "scripts": {
     "start": "npm run build && node lib/cli.js",
     "build": "tsc -p ./tsconfig.json",
-    "build:watch": "tsc --watch",
+    "build:watch": "npm run build -- --watch",
     "test": "nyc --reporter=lcov ts-mocha -- ./test/**/*.spec.ts",
     "test:watch": "npm run test -- --watch",
     "prettier:base": "prettier --ignore-path .gitignore",
@@ -23,7 +31,8 @@
     "lint": "npm run lint:eslint",
     "format:prettier": "npm run prettier:base -- --write **/*.ts",
     "format:eslint": "npm run eslint:base -- --fix **/*.ts",
-    "format": "npm run format:eslint && npm run format:prettier"
+    "format": "npm run format:eslint && npm run format:prettier",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "husky": {
     "hooks": {
@@ -64,6 +73,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^4.3.8",
     "mocha": "^8.3.1",
+    "np": "^7.4.0",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "ts-mocha": "^8.0.0",
