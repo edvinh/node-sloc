@@ -194,6 +194,7 @@ console.log(res)
 - Objective C
 - Perl
 - PHP
+- Pug
 - Python
 - Ruby
 - Rust

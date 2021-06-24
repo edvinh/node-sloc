@@ -156,6 +156,10 @@ const extensions: FileExtension[] = [
     comments: cStyleComments,
   },
   {
+    lang: 'pug',
+    comments: { line: '//', block: null },
+  },
+  {
     lang: 'py',
     comments: { line: '#', block: { start: '"""', end: '"""' } },
   },
