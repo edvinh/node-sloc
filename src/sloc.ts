@@ -23,9 +23,14 @@ const walkAndCount = (options: Options): Promise<SLOCResult | null> => {
       reject('No such file or path. Exiting.')
     }
 
+    // Make sure all extensions start with a dot
+    const normalizedExtensions = options.extensions?.map((extension) =>
+      extension.startsWith('.') ? extension : `.${extension}`
+    )
+
     if (fs.statSync(options.path).isFile()) {
       // If the file extension should be ignored, resolve with sloc: 0 and ignore the path
-      if (!utils.fileAllowed(options.path, options.extensions || [])) {
+      if (!utils.fileExtensionAllowed(options.path, normalizedExtensions || [])) {
         resolve(null)
       }
       utils.countSloc(options.path).then((res) => {
@@ -41,7 +46,12 @@ const walkAndCount = (options: Options): Promise<SLOCResult | null> => {
         .walk(options)
         .then((res) => {
           const promises: Promise<FileSLOC>[] = []
-          const filteredPaths = utils.filterFiles(res, options.extensions || [])
+          const filteredPaths = utils.filterFiles(res, normalizedExtensions || [])
+
+          if (!filteredPaths.length) {
+            reject('No files found matching the specified extensions and path. Exiting.')
+          }
+
           filteredPaths.forEach((fpath) => {
             promises.push(utils.countSloc(fpath))
           })

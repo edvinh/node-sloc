@@ -112,7 +112,13 @@ const countSloc = (file: string): Promise<FileSLOC> => {
           return
         }
 
-        inBlock = !inBlock
+        // Special case for when block comment tokens are identical
+        if (start === end) {
+          inBlock = !inBlock
+          return
+        }
+
+        inBlock = true
         return
       }
 
@@ -151,15 +157,14 @@ const countSloc = (file: string): Promise<FileSLOC> => {
 }
 
 /* Checks if a file extension is allowed. */
-const fileAllowed = (file: string, extensions: string[]): boolean => {
-  const extension = file.split('.').pop()?.toLowerCase() // get the file extension
-  return extensions.includes(extension || '') // check if it exists in the given array
+const fileExtensionAllowed = (file: string, extensions: string[]): boolean => {
+  return extensions.some((extension) => file.endsWith(extension))
 }
 
 /* Filters an array of filenames and returns a list of allowed files. */
 const filterFiles = (files: string[], extensions: string[]): string[] => {
   return files.filter((file: string) => {
-    return fileAllowed(file, extensions)
+    return fileExtensionAllowed(file, extensions)
   })
 }
 
@@ -191,4 +196,4 @@ function getCommentChars(extension: string): FileExtension['comments'] {
   }
 }
 
-export { walk, countSloc, filterFiles, fileAllowed, prettyPrint }
+export { walk, countSloc, filterFiles, fileExtensionAllowed, prettyPrint }

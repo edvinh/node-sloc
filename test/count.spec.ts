@@ -124,7 +124,7 @@ describe('Count', () => {
   it('should count correctly when using callback and nested paths', (done) => {
     const options = {
       path: 'test/test_assets',
-      ignorePaths: ['test/test_assets/lang', '**/multipleblockstarts*'],
+      ignorePaths: ['test/test_assets/lang', '**/multipleblockstarts*', '**/*.spec.js'],
       extensions: ['qq'],
     }
 
@@ -154,13 +154,38 @@ describe('Count', () => {
     sloc(options, callback)
   })
 
+  it('should be able to handle extensions with multiple dots', () => {
+    const options = {
+      path: 'test/test_assets',
+      ignoreDefault: true,
+      extensions: ['spec.xyz'],
+    }
+
+    const result = sloc(options)
+
+    return expect(result).to.eventually.eql({
+      paths: [`test${path.sep}test_assets${path.sep}testfile.spec.xyz`],
+      sloc: 7,
+      comments: 3,
+      blank: 2,
+      loc: 10,
+      files: 1,
+    })
+  })
+
   it('should be able to parse multiple block comment start token occurrences in same comment block', () => {
     const options = {
       path: 'test/test_assets/multipleblockstarts.c',
     }
 
     const result = sloc(options)
-    expect(result).to.eventually.have.nested.property('sloc.sloc', 3)
-    expect(result).to.eventually.have.nested.property('sloc.comments', 5)
+    return expect(result).to.eventually.eql({
+      paths: [`test/test_assets/multipleblockstarts.c`],
+      files: 1,
+      sloc: 3,
+      comments: 5,
+      blank: 0,
+      loc: 8,
+    })
   })
 })
